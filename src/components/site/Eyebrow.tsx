@@ -3,7 +3,7 @@ export function Eyebrow({
   label,
   tone = "dark",
 }: {
-  number?: string;
+  number?: string | undefined;
   label: string;
   tone?: "dark" | "light";
 }) {
