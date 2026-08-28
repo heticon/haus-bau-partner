@@ -342,11 +342,10 @@ const serviceWhat: Record<string, { what: string; excludes?: string[]; why: stri
   },
 };
 
-export const serviceDetails: ServiceDetail[] = services.map((s, i) => ({
-  ...s,
-  slug: serviceSlugs[i],
-  ...serviceWhat[serviceSlugs[i]],
-}));
+export const serviceDetails: ServiceDetail[] = services.map((s, i) => {
+  const slug = serviceSlugs[i] as string;
+  return { ...s, slug, ...(serviceWhat[slug] as { what: string; excludes?: string[]; why: string[] }) };
+});
 
 export function getService(slug: string) {
   return serviceDetails.find((s) => s.slug === slug);
