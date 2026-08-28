@@ -1,10 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Eyebrow } from "@/components/site/Eyebrow";
-import { reviews } from "@/lib/site-data";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import { projects, reviews } from "@/lib/site-data";
+import { projectImage } from "@/lib/project-images";
 
 export const Route = createFileRoute("/projekte")({
   head: () => ({
@@ -13,7 +12,7 @@ export const Route = createFileRoute("/projekte")({
       {
         name: "description",
         content:
-          "Ausgeführte Projekte in Hamburg und Umgebung — Komplettsanierung, Kellerabdichtung, Trockenbau und Möbelbau. Dazu 10 MyHammer-Bewertungen mit 5 von 5 Sternen.",
+          "11 ausgeführte Projekte in Hamburg und Umgebung — Komplettsanierung, Kellerabdichtung, Trockenbau und Möbelbau. Dazu 10 MyHammer-Bewertungen mit 5 von 5 Sternen.",
       },
       { property: "og:title", content: "Projekte & Bewertungen — UM Haus&Bau" },
       {
@@ -26,34 +25,12 @@ export const Route = createFileRoute("/projekte")({
   component: ProjektePage,
 });
 
-const projects = [
-  {
-    image: project1,
-    category: "Komplettsanierung · Hamburg",
-    title: "Wohnung aus den 80er Jahren, saniert in 3 Monaten",
-    text:
-      "Abbruch, Elektro, Estrich, Boden, Treppe, Trockenbau und Malerarbeiten — inklusive Koordination eines separaten Heizungs- und Sanitärtechnikers.",
-    featured: true,
-  },
-  {
-    image: project2,
-    category: "Abdichtung & Dämmung · Barsbüttel",
-    title: "Kellerabdichtung mit neuer Terrasse",
-    text:
-      "85 m² Außenabdichtung und Dämmung am gesamten Gebäude, ergänzt durch eine neue Terrasse mit Terrassendach.",
-    featured: false,
-  },
-  {
-    image: project3,
-    category: "Möbelbau & Raumgestaltung · Norderstedt",
-    title: "Einbaumöbel nach Maß",
-    text:
-      "Planung und Fertigung in der eigenen Möbelwerkstatt — abgestimmt auf Raummaße, Nutzung und Oberflächen des Innenausbaus.",
-    featured: false,
-  },
-];
-
 function ProjektePage() {
+  // Featured: first 3 projects marked featured, rest keep original order (§6)
+  const featured = projects.filter((p) => p.featured).slice(0, 3);
+  const standard = projects.filter((p) => !featured.includes(p));
+  const ordered = [...featured, ...standard];
+
   return (
     <>
       <PageHero
@@ -65,49 +42,62 @@ function ProjektePage() {
             <span className="accent-italic text-navy-light">nachprüfen kann.</span>
           </>
         }
-        lead="Ausschnitte aus realisierten Projekten in Hamburg, Norderstedt und Umgebung — vom abgedichteten Keller bis zur komplett sanierten Wohnung."
+        lead="11 realisierte Projekte in Hamburg, Norderstedt und Umgebung — vom abgedichteten Keller bis zur komplett sanierten Wohnung."
       />
 
       <section className="surface-cream">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-6 lg:grid-cols-3">
-            {projects.map((p, index) => (
-              <article
-                key={p.title}
-                className={`group overflow-hidden rounded-lg border border-navy/12 bg-white ${
-                  p.featured ? "lg:col-span-2" : ""
-                }`}
-              >
-                <div className="relative">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    width={1280}
-                    height={960}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    className="h-64 w-full object-cover md:h-80"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-6 pt-16">
-                    <p className="mono-label text-white/70">{p.category}</p>
-                    <h2 className="mt-2 text-xl font-bold text-white md:text-2xl">
-                      {p.title}
-                    </h2>
+            {ordered.map((p, index) => {
+              const isFeaturedRow = index < 3;
+              return (
+                <Link
+                  key={p.slug}
+                  to="/projekte/$slug"
+                  params={{ slug: p.slug }}
+                  className="group overflow-hidden rounded-lg border border-navy/12 bg-white transition-shadow hover:shadow-lg"
+                >
+                  <div className="relative">
+                    <img
+                      src={projectImage(p.slug) as unknown as string}
+                      alt={p.title}
+                      width={1280}
+                      height={960}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      className={`w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+                        isFeaturedRow ? "h-64 md:h-80" : "h-52 md:h-60"
+                      }`}
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-6 pt-16">
+                      <p className="mono-label text-white/70">
+                        {p.category} · {p.location}
+                      </p>
+                      <h2
+                        className={`mt-2 font-bold text-white ${
+                          isFeaturedRow ? "text-xl md:text-2xl" : "text-lg"
+                        }`}
+                      >
+                        {p.title}
+                      </h2>
+                    </div>
+                    {p.featured ? (
+                      <span className="absolute right-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-navy">
+                        Referenz
+                      </span>
+                    ) : null}
                   </div>
-                  {p.featured ? (
-                    <span className="absolute right-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-navy">
-                      Referenz
+                  <div className="flex items-center justify-between gap-4 p-6">
+                    <p className="text-sm leading-relaxed text-muted-foreground">{p.info}</p>
+                    <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-navy">
+                      Mehr erfahren <ArrowUpRight className="h-3.5 w-3.5" />
                     </span>
-                  ) : null}
-                </div>
-                <p className="p-6 text-[1.0625rem] leading-relaxed text-muted-foreground">
-                  {p.text}
-                </p>
-              </article>
-            ))}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
           <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Weitere Projektfotos stellen wir Ihnen auf Anfrage passend zu Ihrem
-            Vorhaben zusammen.
+            Weitere Projektfotos stellen wir Ihnen auf Anfrage passend zu Ihrem Vorhaben zusammen.
           </p>
         </div>
       </section>
@@ -121,8 +111,8 @@ function ProjektePage() {
               <span className="accent-italic text-navy-light">zehn mal 5 von 5.</span>
             </h2>
             <p className="max-w-sm text-sm leading-relaxed text-white/55">
-              Alle nachfolgenden Bewertungen stammen von der Plattform MyHammer und
-              sind dort öffentlich einsehbar.
+              Alle nachfolgenden Bewertungen stammen von der Plattform MyHammer und sind dort
+              öffentlich einsehbar.
             </p>
           </div>
 
@@ -133,14 +123,10 @@ function ProjektePage() {
                 className="flex flex-col rounded-lg border border-white/12 bg-white/[0.04] p-7"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-xs tracking-[0.18em] text-navy-light">
-                    5 / 5
-                  </span>
+                  <span className="font-mono text-xs tracking-[0.18em] text-navy-light">5 / 5</span>
                   <span className="font-mono text-[0.7rem] text-white/40">{r.date}</span>
                 </div>
-                <p className="mt-6 text-[1.0625rem] leading-relaxed text-white/85">
-                  „{r.text}“
-                </p>
+                <p className="mt-6 text-[1.0625rem] leading-relaxed text-white/85">„{r.text}“</p>
                 <div className="mt-auto pt-7">
                   <p className="text-sm font-semibold text-white">
                     {r.name} · {r.location}
