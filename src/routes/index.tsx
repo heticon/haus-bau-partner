@@ -70,18 +70,21 @@ const stats = [
 
 const featuredProjects = [
   {
+    slug: "komplettsanierung-wohnung-hamburg",
     image: project1,
     category: "Komplettsanierung · Hamburg",
     title: "Wohnung, saniert in 3 Monaten",
     featured: true,
   },
   {
+    slug: "kellerabdichtung-terrasse-barsbuettel",
     image: project2,
     category: "Abdichtung & Dämmung · Barsbüttel",
     title: "Keller, Terrasse, Terrassendach",
     featured: false,
   },
   {
+    slug: "einbaumoebel-nach-mass-norderstedt",
     image: project3,
     category: "Möbelbau · Norderstedt",
     title: "Einbaumöbel nach Maß",
@@ -108,15 +111,13 @@ function Index() {
           <Eyebrow label="Bauunternehmen Norderstedt · seit 2024" tone="light" />
           <h1 className="mt-8 max-w-4xl text-[2.5rem] font-extrabold leading-[1.02] text-white md:text-7xl">
             Alles aus einer Hand —{" "}
-            <span className="accent-italic text-navy-light">
-              ein Ansprechpartner
-            </span>{" "}
-            für Ihr Projekt.
+            <span className="accent-italic text-navy-light">ein Ansprechpartner</span> für Ihr
+            Projekt.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70">
-            Sanierung, Neubau und Innenausbau für private und gewerbliche Kunden in
-            Hamburg und Umgebung. Von der Planung bis zur Fertigstellung — geplant,
-            koordiniert und ausgeführt aus einem Haus.
+            Sanierung, Neubau und Innenausbau für private und gewerbliche Kunden in Hamburg und
+            Umgebung. Von der Planung bis zur Fertigstellung — geplant, koordiniert und ausgeführt
+            aus einem Haus.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -139,9 +140,7 @@ function Index() {
           <dl className="mx-auto grid max-w-site grid-cols-2 divide-white/12 px-5 md:grid-cols-4 md:divide-x md:px-8">
             {stats.map((s) => (
               <div key={s.label} className="px-2 py-7 md:px-8 md:py-9">
-                <dt className="font-mono text-2xl font-bold text-white md:text-3xl">
-                  {s.value}
-                </dt>
+                <dt className="font-mono text-2xl font-bold text-white md:text-3xl">{s.value}</dt>
                 <dd className="mono-label mt-2 text-white/50">{s.label}</dd>
               </div>
             ))}
@@ -162,16 +161,15 @@ function Index() {
             </div>
             <div>
               <p className="text-lg leading-relaxed text-foreground/85">
-                Die meisten Bauvorhaben scheitern nicht an einzelnen Arbeiten, sondern
-                an der Abstimmung dazwischen: Wer beginnt wann, wer wartet auf wen,
-                wer haftet für welche Schnittstelle.
+                Die meisten Bauvorhaben scheitern nicht an einzelnen Arbeiten, sondern an der
+                Abstimmung dazwischen: Wer beginnt wann, wer wartet auf wen, wer haftet für welche
+                Schnittstelle.
               </p>
               <p className="mt-5 text-[1.0625rem] leading-relaxed text-muted-foreground">
-                Wir nehmen Ihnen diese Arbeit ab. Sie besprechen Ihr Vorhaben mit
-                einem Ansprechpartner, wir strukturieren daraus einen Ablauf,
-                beauftragen und steuern die beteiligten Gewerke und Fachpartner und
-                halten Termine nach. Sie treffen Entscheidungen — nicht Termine mit
-                fünf Betrieben.
+                Wir nehmen Ihnen diese Arbeit ab. Sie besprechen Ihr Vorhaben mit einem
+                Ansprechpartner, wir strukturieren daraus einen Ablauf, beauftragen und steuern die
+                beteiligten Gewerke und Fachpartner und halten Termine nach. Sie treffen
+                Entscheidungen — nicht Termine mit fünf Betrieben.
               </p>
               <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 sm:grid-cols-2">
                 {[
@@ -216,8 +214,7 @@ function Index() {
             </div>
             <div>
               <p className="text-[1.0625rem] leading-relaxed text-white/60">
-                Acht Leistungsbereiche — koordiniert als ein Projekt, nicht als acht
-                Einzelaufträge.
+                Acht Leistungsbereiche — koordiniert als ein Projekt, nicht als acht Einzelaufträge.
               </p>
               <Link
                 to="/leistungen"
@@ -240,11 +237,48 @@ function Index() {
                   <ArrowUpRight className="h-4 w-4 text-white/0 transition-colors group-hover:text-navy-light" />
                 </div>
                 <h3 className="mt-6 text-xl font-bold text-white">{s.title}</h3>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-white/55">
-                  {s.intro}
-                </p>
+                <p className="mt-3 text-[0.95rem] leading-relaxed text-white/55">{s.intro}</p>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust / Key Numbers */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+          <Eyebrow number="03" label="Zahlen, die zählen" />
+          <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 md:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-background p-7 md:p-9">
+                <p className="font-mono text-3xl font-bold text-navy md:text-4xl">{s.value}</p>
+                <p className="mono-label mt-2 text-stone">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Kostenkalkulator CTA */}
+      <section className="surface-cream">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+          <div className="grid gap-8 rounded-lg border border-navy/12 bg-white/80 p-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-14">
+            <div>
+              <Eyebrow number="04" label="Kostenkalkulator" />
+              <h2 className="mt-6 max-w-lg text-2xl font-bold leading-[1.1] md:text-[2.25rem]">
+                Eine erste Orientierung,{" "}
+                <span className="accent-italic text-navy">bevor Sie anrufen.</span>
+              </h2>
+              <p className="mt-4 max-w-md text-[1.0625rem] leading-relaxed text-muted-foreground">
+                In wenigen Schritten zu einer unverbindlichen Kosteneinschätzung für Ihr Vorhaben.
+              </p>
+            </div>
+            <Link
+              to="/projekt-kalkulieren"
+              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-navy-deep"
+            >
+              Projekt kalkulieren <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -263,27 +297,24 @@ function Index() {
             />
             <div className="absolute bottom-0 left-0 max-w-[14rem] rounded-tr-lg bg-navy p-6 text-primary-foreground">
               <p className="text-3xl font-extrabold">ca. 17</p>
-              <p className="mono-label mt-2 text-white/70">
-                Personen inkl. Fachpartner am Projekt
-              </p>
+              <p className="mono-label mt-2 text-white/70">Personen inkl. Fachpartner am Projekt</p>
             </div>
           </div>
           <div>
-            <Eyebrow number="03" label="Über uns" />
+            <Eyebrow number="05" label="Über uns" />
             <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.75rem]">
               Handwerk, Planung und{" "}
               <span className="accent-italic text-navy">Bauleitung in einem Team.</span>
             </h2>
             <p className="mt-6 text-[1.0625rem] leading-relaxed text-muted-foreground">
-              UM Haus&amp;Bau wurde am 01.07.2024 in Norderstedt gegründet. Aus
-              Renovierungen, Terrassenbau und Abdichtungen ist seit Anfang 2025 ein
-              Anbieter für komplette Sanierungen, Neubauten und die vollständige
-              Projektkoordination geworden.
+              UM Haus&amp;Bau wurde am 01.07.2024 in Norderstedt gegründet. Aus Renovierungen,
+              Terrassenbau und Abdichtungen ist seit Anfang 2025 ein Anbieter für komplette
+              Sanierungen, Neubauten und die vollständige Projektkoordination geworden.
             </p>
             <p className="mt-4 text-[1.0625rem] leading-relaxed text-muted-foreground">
-              Rund 15 Jahre Bauerfahrung in der Geschäftsführung, ein Maurermeister
-              mit rund 40 Jahren Erfahrung in Deutschland, 8 feste Mitarbeiter und
-              ein eingespielter Kreis von Fachpartnern.
+              Rund 15 Jahre Bauerfahrung in der Geschäftsführung, ein Maurermeister mit rund 40
+              Jahren Erfahrung in Deutschland, 8 feste Mitarbeiter und ein eingespielter Kreis von
+              Fachpartnern.
             </p>
             <Link
               to="/ueber-uns"
@@ -298,10 +329,9 @@ function Index() {
       {/* Ablauf */}
       <section className="surface-cream">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
-          <Eyebrow number="04" label="Ablauf" />
+          <Eyebrow number="06" label="Ablauf" />
           <h2 className="mt-7 max-w-3xl text-3xl font-bold leading-[1.08] md:text-[3rem]">
-            Vier Schritte,{" "}
-            <span className="accent-italic text-navy">ein Ansprechpartner.</span>
+            Vier Schritte, <span className="accent-italic text-navy">ein Ansprechpartner.</span>
           </h2>
           <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 md:grid-cols-2 xl:grid-cols-4">
             {process.map((p) => (
@@ -322,10 +352,9 @@ function Index() {
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div>
-              <Eyebrow number="05" label="Projekte" />
+              <Eyebrow number="07" label="Projekte" />
               <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[3rem]">
-                Realisiert in Hamburg{" "}
-                <span className="accent-italic text-navy">und Umgebung.</span>
+                Realisiert in Hamburg <span className="accent-italic text-navy">und Umgebung.</span>
               </h2>
             </div>
             <Link
@@ -340,7 +369,8 @@ function Index() {
             {featuredProjects.map((p) => (
               <Link
                 key={p.title}
-                to="/projekte"
+                to="/projekte/$slug"
+                params={{ slug: p.slug }}
                 className={`group relative overflow-hidden rounded-lg ${
                   p.featured ? "lg:col-span-2" : ""
                 }`}
@@ -355,9 +385,7 @@ function Index() {
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-7 pt-20">
                   <p className="mono-label text-white/65">{p.category}</p>
-                  <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">
-                    {p.title}
-                  </h3>
+                  <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">{p.title}</h3>
                 </div>
                 {p.featured ? (
                   <span className="absolute right-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-navy">
@@ -373,7 +401,7 @@ function Index() {
       {/* Bewertungen */}
       <section className="surface-dark">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
-          <Eyebrow number="06" label="Bewertungen · MyHammer" tone="light" />
+          <Eyebrow number="08" label="Bewertungen · MyHammer" tone="light" />
           <h2 className="mt-7 max-w-3xl text-3xl font-bold leading-[1.08] text-white md:text-[3rem]">
             Zehn Bewertungen,{" "}
             <span className="accent-italic text-navy-light">zehn mal 5 von 5.</span>
@@ -384,19 +412,13 @@ function Index() {
                 key={`${r.name}-${r.date}`}
                 className="flex flex-col rounded-lg border border-white/12 bg-white/[0.035] p-7"
               >
-                <span className="font-mono text-xs tracking-[0.18em] text-navy-light">
-                  5 / 5
-                </span>
-                <p className="mt-6 text-[1.0625rem] leading-relaxed text-white/85">
-                  „{r.text}“
-                </p>
+                <span className="font-mono text-xs tracking-[0.18em] text-navy-light">5 / 5</span>
+                <p className="mt-6 text-[1.0625rem] leading-relaxed text-white/85">„{r.text}“</p>
                 <div className="mt-auto pt-7">
                   <p className="text-sm font-semibold text-white">
                     {r.name} · {r.location}
                   </p>
-                  <p className="mono-label mt-2 text-white/35">
-                    MyHammer · {r.date}
-                  </p>
+                  <p className="mono-label mt-2 text-white/35">MyHammer · {r.date}</p>
                 </div>
               </article>
             ))}
@@ -414,10 +436,9 @@ function Index() {
       <section className="surface-cream">
         <div className="mx-auto grid max-w-site gap-14 px-5 py-20 md:px-8 md:py-32 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
           <div>
-            <Eyebrow number="07" label="Häufige Fragen" />
+            <Eyebrow number="09" label="Häufige Fragen" />
             <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.75rem]">
-              Antworten,{" "}
-              <span className="accent-italic text-navy">die zählen.</span>
+              Antworten, <span className="accent-italic text-navy">die zählen.</span>
             </h2>
             <p className="mt-6 max-w-sm text-[1.0625rem] leading-relaxed text-muted-foreground">
               Weitere Fragen klären wir am schnellsten direkt:{" "}
@@ -439,11 +460,7 @@ function Index() {
                   >
                     <span className="min-w-0 font-semibold">{f.q}</span>
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-navy/30 text-navy">
-                      {open ? (
-                        <Minus className="h-3.5 w-3.5" />
-                      ) : (
-                        <Plus className="h-3.5 w-3.5" />
-                      )}
+                      {open ? <Minus className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
                     </span>
                   </button>
                   {open ? (
@@ -454,6 +471,44 @@ function Index() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Kontakt — low-friction final conversion point */}
+      <section className="surface-dark">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
+          <Eyebrow number="10" label="Kontakt" tone="light" />
+          <div className="mt-7 grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <h2 className="max-w-2xl text-3xl font-bold text-white md:text-[3rem]">
+              Erzählen Sie uns von{" "}
+              <span className="accent-italic text-navy-light">Ihrem Vorhaben.</span>
+            </h2>
+          </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-3">
+            <a
+              href={contact.phoneHref}
+              className="rounded-lg border border-white/12 bg-white/[0.035] p-7 transition-colors hover:border-navy-light/60"
+            >
+              <p className="mono-label text-white/50">Telefon &amp; WhatsApp</p>
+              <p className="mt-3 text-lg font-bold text-white">{contact.phone}</p>
+            </a>
+            <a
+              href={`mailto:${contact.email}`}
+              className="rounded-lg border border-white/12 bg-white/[0.035] p-7 transition-colors hover:border-navy-light/60"
+            >
+              <p className="mono-label text-white/50">E-Mail</p>
+              <p className="mt-3 text-lg font-bold text-white">{contact.email}</p>
+            </a>
+            <Link
+              to="/kontakt"
+              className="flex flex-col justify-between rounded-lg bg-white p-7 text-ink transition-opacity hover:opacity-90"
+            >
+              <p className="mono-label text-ink/50">Kontaktformular</p>
+              <span className="mt-3 inline-flex items-center gap-2 text-lg font-bold">
+                Zum Formular <ArrowUpRight className="h-4 w-4" />
+              </span>
+            </Link>
           </div>
         </div>
       </section>
