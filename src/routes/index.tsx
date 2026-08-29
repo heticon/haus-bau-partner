@@ -88,12 +88,12 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover opacity-45"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-ink/90 via-ink/70 to-navy-deep/85" />
-        <div className="relative mx-auto max-w-site px-5 pb-44 pt-24 md:px-8 md:pb-52 md:pt-36">
+        <div className="relative mx-auto max-w-site px-5 pb-14 pt-28 md:px-8 md:pb-52 md:pt-36">
           <Eyebrow label="Bauunternehmen Norderstedt · seit 2024" tone="light" />
-          <h1 className="mt-8 max-w-4xl text-[2.5rem] font-extrabold leading-[1.02] text-white md:text-7xl">
+          <h1 className="mt-8 max-w-4xl text-[2.25rem] font-extrabold leading-[1.06] text-white sm:text-[2.5rem] sm:leading-[1.02] md:text-7xl">
             Alles aus einer Hand —{" "}
-            <span className="accent-italic text-navy-light">ein Ansprechpartner</span>&nbsp; für
-            Ihr Projekt.
+            <span className="accent-italic text-navy-light">ein Ansprechpartner</span> für Ihr
+            Projekt.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70">
             Sanierung, Neubau und Innenausbau für private und gewerbliche Kunden in Hamburg und
@@ -116,11 +116,11 @@ function Index() {
           </div>
         </div>
 
-        {/* Stats bar as overlay on the hero */}
-        <div className="absolute inset-x-0 bottom-0 border-t border-white/12 bg-ink/55 backdrop-blur-sm">
+        {/* Stats bar — in flow on mobile, overlay on the hero from md up */}
+        <div className="relative border-t border-white/12 bg-ink/55 backdrop-blur-sm md:absolute md:inset-x-0 md:bottom-0">
           <dl className="mx-auto grid max-w-site grid-cols-2 divide-white/12 px-5 md:grid-cols-4 md:divide-x md:px-8">
             {stats.map((s) => (
-              <div key={s.label} className="px-2 py-7 md:px-8 md:py-9">
+              <div key={s.label} className="px-4 py-6 md:px-8 md:py-9">
                 <dt className="font-mono text-2xl font-bold text-white md:text-3xl">{s.value}</dt>
                 <dd className="mono-label mt-2 text-white/50">{s.label}</dd>
               </div>
