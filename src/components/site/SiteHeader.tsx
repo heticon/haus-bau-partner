@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logo from "@/assets/um-logo.jpg.asset.json";
+import logo from "@/assets/um-logo.png";
 import { contact, serviceDetails } from "@/lib/site-data";
 
 const nav = [
@@ -19,7 +19,7 @@ export function SiteHeader() {
       <div className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 md:px-8">
         <Link to="/" className="flex min-w-0 items-center gap-3">
           <img
-            src={logo.url}
+            src={logo}
             alt="UM Haus&Bau Logo"
             width={48}
             height={48}
@@ -80,7 +80,7 @@ export function SiteHeader() {
           </nav>
           <a
             href={contact.phoneHref}
-            className="hidden rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-navy-deep md:inline-flex"
+            className="hidden rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep md:inline-flex"
           >
             Jetzt Anrufen
           </a>

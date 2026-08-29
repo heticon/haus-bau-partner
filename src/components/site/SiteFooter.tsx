@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import logo from "@/assets/um-logo.jpg.asset.json";
 import { contact } from "@/lib/site-data";
 import { Eyebrow } from "./Eyebrow";
 
@@ -17,7 +16,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
             <Link
               to="/kontakt"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink transition-opacity hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-90"
             >
               Anfrage starten <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -35,15 +34,7 @@ export function SiteFooter() {
         <div className="mx-auto grid max-w-site gap-10 px-5 py-14 md:grid-cols-2 md:px-8 lg:grid-cols-4">
           <div>
             <div className="flex min-w-0 items-center gap-3">
-              <img
-                src={logo.url}
-                alt="UM Haus&Bau Logo"
-                width={44}
-                height={44}
-                loading="lazy"
-                className="h-10 w-10 shrink-0 object-contain"
-              />
-              <span className="text-sm font-extrabold tracking-tight text-white">
+              <span className="text-base font-extrabold tracking-tight text-white">
                 UM HAUS&amp;BAU
               </span>
             </div>

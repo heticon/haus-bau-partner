@@ -14,8 +14,11 @@ import { Route as DatenschutzRouteImport } from './routes/datenschutz'
 import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as LeistungenRouteImport } from './routes/leistungen'
+import { Route as ProjektKalkulierenRouteImport } from './routes/projekt-kalkulieren'
 import { Route as ProjekteRouteImport } from './routes/projekte'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
+import { Route as LeistungenSlugRouteImport } from './routes/leistungen_.$slug'
+import { Route as ProjekteSlugRouteImport } from './routes/projekte_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -42,6 +45,11 @@ const LeistungenRoute = LeistungenRouteImport.update({
   path: '/leistungen',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjektKalkulierenRoute = ProjektKalkulierenRouteImport.update({
+  id: '/projekt-kalkulieren',
+  path: '/projekt-kalkulieren',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjekteRoute = ProjekteRouteImport.update({
   id: '/projekte',
   path: '/projekte',
@@ -52,6 +60,16 @@ const UeberUnsRoute = UeberUnsRouteImport.update({
   path: '/ueber-uns',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeistungenSlugRoute = LeistungenSlugRouteImport.update({
+  id: '/leistungen_/$slug',
+  path: '/leistungen/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjekteSlugRoute = ProjekteSlugRouteImport.update({
+  id: '/projekte_/$slug',
+  path: '/projekte/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,8 +77,11 @@ export interface FileRoutesByFullPath {
   '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
   '/leistungen': typeof LeistungenRoute
+  '/projekt-kalkulieren': typeof ProjektKalkulierenRoute
   '/projekte': typeof ProjekteRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/leistungen/$slug': typeof LeistungenSlugRoute
+  '/projekte/$slug': typeof ProjekteSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +89,11 @@ export interface FileRoutesByTo {
   '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
   '/leistungen': typeof LeistungenRoute
+  '/projekt-kalkulieren': typeof ProjektKalkulierenRoute
   '/projekte': typeof ProjekteRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/leistungen/$slug': typeof LeistungenSlugRoute
+  '/projekte/$slug': typeof ProjekteSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +102,11 @@ export interface FileRoutesById {
   '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
   '/leistungen': typeof LeistungenRoute
+  '/projekt-kalkulieren': typeof ProjektKalkulierenRoute
   '/projekte': typeof ProjekteRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/leistungen_/$slug': typeof LeistungenSlugRoute
+  '/projekte_/$slug': typeof ProjekteSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -89,8 +116,11 @@ export interface FileRouteTypes {
     | '/impressum'
     | '/kontakt'
     | '/leistungen'
+    | '/projekt-kalkulieren'
     | '/projekte'
     | '/ueber-uns'
+    | '/leistungen/$slug'
+    | '/projekte/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -98,8 +128,11 @@ export interface FileRouteTypes {
     | '/impressum'
     | '/kontakt'
     | '/leistungen'
+    | '/projekt-kalkulieren'
     | '/projekte'
     | '/ueber-uns'
+    | '/leistungen/$slug'
+    | '/projekte/$slug'
   id:
     | '__root__'
     | '/'
@@ -107,8 +140,11 @@ export interface FileRouteTypes {
     | '/impressum'
     | '/kontakt'
     | '/leistungen'
+    | '/projekt-kalkulieren'
     | '/projekte'
     | '/ueber-uns'
+    | '/leistungen_/$slug'
+    | '/projekte_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,8 +153,11 @@ export interface RootRouteChildren {
   ImpressumRoute: typeof ImpressumRoute
   KontaktRoute: typeof KontaktRoute
   LeistungenRoute: typeof LeistungenRoute
+  ProjektKalkulierenRoute: typeof ProjektKalkulierenRoute
   ProjekteRoute: typeof ProjekteRoute
   UeberUnsRoute: typeof UeberUnsRoute
+  LeistungenSlugRoute: typeof LeistungenSlugRoute
+  ProjekteSlugRoute: typeof ProjekteSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeistungenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projekt-kalkulieren': {
+      id: '/projekt-kalkulieren'
+      path: '/projekt-kalkulieren'
+      fullPath: '/projekt-kalkulieren'
+      preLoaderRoute: typeof ProjektKalkulierenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projekte': {
       id: '/projekte'
       path: '/projekte'
@@ -172,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UeberUnsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leistungen_/$slug': {
+      id: '/leistungen_/$slug'
+      path: '/leistungen/$slug'
+      fullPath: '/leistungen/$slug'
+      preLoaderRoute: typeof LeistungenSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projekte_/$slug': {
+      id: '/projekte_/$slug'
+      path: '/projekte/$slug'
+      fullPath: '/projekte/$slug'
+      preLoaderRoute: typeof ProjekteSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -181,8 +241,11 @@ const rootRouteChildren: RootRouteChildren = {
   ImpressumRoute: ImpressumRoute,
   KontaktRoute: KontaktRoute,
   LeistungenRoute: LeistungenRoute,
+  ProjektKalkulierenRoute: ProjektKalkulierenRoute,
   ProjekteRoute: ProjekteRoute,
   UeberUnsRoute: UeberUnsRoute,
+  LeistungenSlugRoute: LeistungenSlugRoute,
+  ProjekteSlugRoute: ProjekteSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

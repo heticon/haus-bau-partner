@@ -2,12 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowUpRight, Plus, Minus } from "lucide-react";
 import { Eyebrow } from "@/components/site/Eyebrow";
-import { services, process, reviews, contact } from "@/lib/site-data";
+import { ReviewCarousel } from "@/components/site/ReviewCarousel";
+import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { services, process, contact, projects } from "@/lib/site-data";
+import { projectCover } from "@/lib/project-images";
 import hero from "@/assets/hero.jpg";
 import about from "@/assets/about.jpg";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,20 +40,12 @@ const faqs = [
     a: "Schwerpunkt sind Hamburg, Norderstedt und die umliegenden Gemeinden. Projekte in einem Umkreis von rund 200–300 km um Hamburg prüfen wir auf Anfrage.",
   },
   {
-    q: "Was bedeutet „alles aus einer Hand“ konkret?",
-    a: "Sie haben einen Ansprechpartner für das gesamte Projekt. Wir planen die Abfolge der Gewerke, beauftragen und koordinieren beteiligte Fachpartner, halten Termine nach und begleiten die Abnahme.",
-  },
-  {
     q: "Übernehmen Sie auch Elektro-, Sanitär- und Heizungsarbeiten?",
     a: "Diese Arbeiten führen wir nicht selbst aus. Sie werden von qualifizierten Fachpartnern erbracht — zum Beispiel AF Elektro GmbH für Elektro und BuB Bau GmbH für Sanitär und Heizung — und von uns koordiniert.",
   },
   {
     q: "Arbeiten Sie auch für Privatpersonen mit einzelnen Räumen?",
     a: "Ja. Neben Komplettsanierungen planen und realisieren wir einzelne Räume, Badezimmer und Möbel nach Maß in unserer eigenen Möbelwerkstatt in Norderstedt.",
-  },
-  {
-    q: "Unterstützen Sie bei Unterlagen für Förderungen?",
-    a: "Wir unterstützen bei der Planung und bei der Zusammenstellung benötigter Unterlagen, auch im Zusammenhang mit möglichen staatlichen Förderungen. Eine Zusage oder Garantie für eine Förderung oder deren Bewilligung können wir nicht geben.",
   },
   {
     q: "Wie läuft eine erste Anfrage ab?",
@@ -69,28 +61,17 @@ const stats = [
 ];
 
 const featuredProjects = [
-  {
-    slug: "komplettsanierung-wohnung-hamburg",
-    image: project1,
-    category: "Komplettsanierung · Hamburg",
-    title: "Wohnung, saniert in 3 Monaten",
-    featured: true,
-  },
-  {
-    slug: "kellerabdichtung-terrasse-barsbuettel",
-    image: project2,
-    category: "Abdichtung & Dämmung · Barsbüttel",
-    title: "Keller, Terrasse, Terrassendach",
-    featured: false,
-  },
-  {
-    slug: "einbaumoebel-nach-mass-norderstedt",
-    image: project3,
-    category: "Möbelbau · Norderstedt",
-    title: "Einbaumöbel nach Maß",
-    featured: false,
-  },
-];
+  ...projects.filter((p) => p.featured),
+  ...projects.filter((p) => !p.featured),
+]
+  .slice(0, 5)
+  .map((p, i) => ({
+    slug: p.slug,
+    image: projectCover(p.slug),
+    category: `${p.category} · ${p.location}`,
+    title: p.title,
+    featured: i === 0,
+  }));
 
 function Index() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -111,8 +92,8 @@ function Index() {
           <Eyebrow label="Bauunternehmen Norderstedt · seit 2024" tone="light" />
           <h1 className="mt-8 max-w-4xl text-[2.5rem] font-extrabold leading-[1.02] text-white md:text-7xl">
             Alles aus einer Hand —{" "}
-            <span className="accent-italic text-navy-light">ein Ansprechpartner</span> für Ihr
-            Projekt.
+            <span className="accent-italic text-navy-light">ein Ansprechpartner</span>&nbsp; für
+            Ihr Projekt.
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70">
             Sanierung, Neubau und Innenausbau für private und gewerbliche Kunden in Hamburg und
@@ -122,7 +103,7 @@ function Index() {
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
               to="/kontakt"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink transition-opacity hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-90"
             >
               Projekt anfragen <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -153,49 +134,57 @@ function Index() {
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
           <div className="grid gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]">
             <div>
-              <Eyebrow number="01" label="Philosophie" />
+              <Eyebrow label="Warum UM Haus&Bau" />
               <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[3rem]">
-                Sie führen kein Projekt.{" "}
-                <span className="accent-italic text-navy">Das machen wir.</span>
+                Ein Zuhause ist mehr als{" "}
+                <span className="accent-italic text-navy">nur ein Bauprojekt.</span>
               </h2>
             </div>
             <div>
               <p className="text-lg leading-relaxed text-foreground/85">
-                Die meisten Bauvorhaben scheitern nicht an einzelnen Arbeiten, sondern an der
-                Abstimmung dazwischen: Wer beginnt wann, wer wartet auf wen, wer haftet für welche
-                Schnittstelle.
+                Jedes Gebäude und jeder Kunde hat andere Wünsche. Deshalb arbeiten wir nicht nach
+                einem festen Schema.
               </p>
               <p className="mt-5 text-[1.0625rem] leading-relaxed text-muted-foreground">
-                Wir nehmen Ihnen diese Arbeit ab. Sie besprechen Ihr Vorhaben mit einem
-                Ansprechpartner, wir strukturieren daraus einen Ablauf, beauftragen und steuern die
-                beteiligten Gewerke und Fachpartner und halten Termine nach. Sie treffen
-                Entscheidungen — nicht Termine mit fünf Betrieben.
+                Wir hören zu, beraten ehrlich und suchen gemeinsam nach der Lösung, die wirklich zu
+                Ihrem Projekt passt. Dabei übernehmen wir nicht nur einzelne Arbeiten, sondern
+                begleiten Sie von der ersten Idee bis zur fertigen Umsetzung.
               </p>
-              <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 sm:grid-cols-2">
-                {[
-                  {
-                    k: "Statt Suche nach Betrieben",
-                    v: "Ein Vertragspartner für das gesamte Projekt",
-                  },
-                  {
-                    k: "Statt eigener Terminplanung",
-                    v: "Abgestimmte Reihenfolge aller Gewerke",
-                  },
-                  {
-                    k: "Statt unklarer Zuständigkeit",
-                    v: "Ein Ansprechpartner für Rückfragen",
-                  },
-                  {
-                    k: "Statt Papierchaos",
-                    v: "Unterstützung bei Planung und Unterlagen",
-                  },
-                ].map((i) => (
-                  <div key={i.k} className="bg-cream p-6">
-                    <p className="mono-label text-stone">{i.k}</p>
-                    <p className="mt-3 font-semibold leading-snug">{i.v}</p>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-6 text-[1.0625rem] font-semibold leading-relaxed">
+                Sie haben die Idee.{" "}
+                <span className="accent-italic font-normal text-navy">
+                  Wir machen daraus ein fertiges Projekt.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14 md:mt-20">
+            <p className="font-semibold">Was uns dabei wichtig ist:</p>
+            <div className="mt-4 grid gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  k: "Persönliche Betreuung",
+                  v: "Sie haben immer einen festen Ansprechpartner.",
+                },
+                {
+                  k: "Alles an einem Ort",
+                  v: "Verschiedene Arbeiten koordinieren und setzen wir für Sie um.",
+                },
+                {
+                  k: "Individuelle Lösungen",
+                  v: "Wir passen unsere Arbeit an Ihr Gebäude und Ihre Wünsche an.",
+                },
+                {
+                  k: "Saubere Arbeit",
+                  v: "Mit erfahrenen Fachkräften und zuverlässigen Partnern.",
+                },
+              ].map((i) => (
+                <div key={i.k} className="bg-cream p-6">
+                  <p className="font-semibold leading-snug">{i.k}</p>
+                  <p className="mt-2 text-[0.95rem] leading-relaxed text-muted-foreground">{i.v}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -206,7 +195,7 @@ function Index() {
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-end">
             <div>
-              <Eyebrow number="02" label="Leistungen" tone="light" />
+              <Eyebrow label="Leistungen" tone="light" />
               <h2 className="mt-7 text-3xl font-bold leading-[1.08] text-white md:text-[3rem]">
                 Vom Fundament bis zum{" "}
                 <span className="accent-italic text-navy-light">letzten Detail.</span>
@@ -230,30 +219,19 @@ function Index() {
               <Link
                 key={s.number}
                 to="/leistungen"
-                className="group flex min-h-56 flex-col rounded-lg border border-white/12 bg-white/[0.035] p-7 transition-colors hover:border-navy-light/60"
+                className="group relative flex min-h-56 flex-col overflow-hidden rounded-lg border border-white/12 bg-white/[0.035] p-7 transition hover:border-navy-light/60 hover:bg-navy-light/[0.08]"
               >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-5 -right-5 h-20 w-20 rounded-full bg-navy-light/20 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-50"
+                />
                 <div className="flex items-start justify-between gap-4">
                   <span className="font-mono text-xs text-navy-light">{s.number}</span>
-                  <ArrowUpRight className="h-4 w-4 text-white/0 transition-colors group-hover:text-navy-light" />
+                  <ArrowUpRight className="h-4 w-4 shrink-0 -translate-y-3 translate-x-3 text-navy-light opacity-0 transition duration-300 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
                 </div>
                 <h3 className="mt-6 text-xl font-bold text-white">{s.title}</h3>
                 <p className="mt-3 text-[0.95rem] leading-relaxed text-white/55">{s.intro}</p>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Trust / Key Numbers */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
-          <Eyebrow number="03" label="Zahlen, die zählen" />
-          <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-navy/12 bg-navy/12 md:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="bg-background p-7 md:p-9">
-                <p className="font-mono text-3xl font-bold text-navy md:text-4xl">{s.value}</p>
-                <p className="mono-label mt-2 text-stone">{s.label}</p>
-              </div>
             ))}
           </div>
         </div>
@@ -264,7 +242,7 @@ function Index() {
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-8 rounded-lg border border-navy/12 bg-white/80 p-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-14">
             <div>
-              <Eyebrow number="04" label="Kostenkalkulator" />
+              <Eyebrow label="Kostenkalkulator" />
               <h2 className="mt-6 max-w-lg text-2xl font-bold leading-[1.1] md:text-[2.25rem]">
                 Eine erste Orientierung,{" "}
                 <span className="accent-italic text-navy">bevor Sie anrufen.</span>
@@ -275,7 +253,7 @@ function Index() {
             </div>
             <Link
               to="/projekt-kalkulieren"
-              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-navy-deep"
+              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
             >
               Projekt kalkulieren <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -301,7 +279,7 @@ function Index() {
             </div>
           </div>
           <div>
-            <Eyebrow number="05" label="Über uns" />
+            <Eyebrow label="Über uns" />
             <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.75rem]">
               Handwerk, Planung und{" "}
               <span className="accent-italic text-navy">Bauleitung in einem Team.</span>
@@ -329,7 +307,7 @@ function Index() {
       {/* Ablauf */}
       <section className="surface-cream">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
-          <Eyebrow number="06" label="Ablauf" />
+          <Eyebrow label="Ablauf" />
           <h2 className="mt-7 max-w-3xl text-3xl font-bold leading-[1.08] md:text-[3rem]">
             Vier Schritte, <span className="accent-italic text-navy">ein Ansprechpartner.</span>
           </h2>
@@ -352,7 +330,7 @@ function Index() {
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div>
-              <Eyebrow number="07" label="Projekte" />
+              <Eyebrow label="Projekte" />
               <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[3rem]">
                 Realisiert in Hamburg <span className="accent-italic text-navy">und Umgebung.</span>
               </h2>
@@ -371,27 +349,32 @@ function Index() {
                 key={p.title}
                 to="/projekte/$slug"
                 params={{ slug: p.slug }}
-                className={`group relative overflow-hidden rounded-lg ${
+                className={`group block transition duration-200 ease-out hover:-translate-y-0.5 ${
                   p.featured ? "lg:col-span-2" : ""
                 }`}
               >
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  width={1280}
-                  height={960}
-                  loading="lazy"
-                  className="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] md:h-96"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-7 pt-20">
-                  <p className="mono-label text-white/65">{p.category}</p>
-                  <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">{p.title}</h3>
+                <div className="relative overflow-hidden rounded-lg bg-ink">
+                  <div className="relative transition-transform duration-500 group-hover:scale-[1.03]">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      width={1280}
+                      height={960}
+                      loading="lazy"
+                      className="h-72 w-full object-cover md:h-96"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink/70 via-ink/25 to-transparent" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-7">
+                    <p className="mono-label text-white/65">{p.category}</p>
+                    <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">{p.title}</h3>
+                  </div>
+                  {p.featured ? (
+                    <span className="absolute right-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-navy">
+                      Referenz
+                    </span>
+                  ) : null}
                 </div>
-                {p.featured ? (
-                  <span className="absolute right-5 top-5 rounded-full bg-white/90 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-navy">
-                    Referenz
-                  </span>
-                ) : null}
               </Link>
             ))}
           </div>
@@ -401,34 +384,7 @@ function Index() {
       {/* Bewertungen */}
       <section className="surface-dark">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
-          <Eyebrow number="08" label="Bewertungen · MyHammer" tone="light" />
-          <h2 className="mt-7 max-w-3xl text-3xl font-bold leading-[1.08] text-white md:text-[3rem]">
-            Zehn Bewertungen,{" "}
-            <span className="accent-italic text-navy-light">zehn mal 5 von 5.</span>
-          </h2>
-          <div className="mt-14 grid gap-5 md:grid-cols-3">
-            {reviews.slice(0, 3).map((r) => (
-              <article
-                key={`${r.name}-${r.date}`}
-                className="flex flex-col rounded-lg border border-white/12 bg-white/[0.035] p-7"
-              >
-                <span className="font-mono text-xs tracking-[0.18em] text-navy-light">5 / 5</span>
-                <p className="mt-6 text-[1.0625rem] leading-relaxed text-white/85">„{r.text}“</p>
-                <div className="mt-auto pt-7">
-                  <p className="text-sm font-semibold text-white">
-                    {r.name} · {r.location}
-                  </p>
-                  <p className="mono-label mt-2 text-white/35">MyHammer · {r.date}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <Link
-            to="/projekte"
-            className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-          >
-            Alle Bewertungen <ArrowUpRight className="h-4 w-4" />
-          </Link>
+          <ReviewCarousel featuredOnly />
         </div>
       </section>
 
@@ -436,7 +392,7 @@ function Index() {
       <section className="surface-cream">
         <div className="mx-auto grid max-w-site gap-14 px-5 py-20 md:px-8 md:py-32 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
           <div>
-            <Eyebrow number="09" label="Häufige Fragen" />
+            <Eyebrow label="Häufige Fragen" />
             <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.75rem]">
               Antworten, <span className="accent-italic text-navy">die zählen.</span>
             </h2>
@@ -478,7 +434,7 @@ function Index() {
       {/* Kontakt — low-friction final conversion point */}
       <section className="surface-dark">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-32">
-          <Eyebrow number="10" label="Kontakt" tone="light" />
+          <Eyebrow label="Kontakt" tone="light" />
           <div className="mt-7 grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <h2 className="max-w-2xl text-3xl font-bold text-white md:text-[3rem]">
               Erzählen Sie uns von{" "}
@@ -502,7 +458,7 @@ function Index() {
             </a>
             <Link
               to="/kontakt"
-              className="flex flex-col justify-between rounded-lg bg-white p-7 text-ink transition-opacity hover:opacity-90"
+              className="flex flex-col justify-between rounded-lg bg-white p-7 text-ink transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-90"
             >
               <p className="mono-label text-ink/50">Kontaktformular</p>
               <span className="mt-3 inline-flex items-center gap-2 text-lg font-bold">
@@ -510,6 +466,13 @@ function Index() {
               </span>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Fachpartner */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+          <PartnerStrip />
         </div>
       </section>
     </>

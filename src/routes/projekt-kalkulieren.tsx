@@ -1,0 +1,352 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowUpRight, ArrowLeft, Check } from "lucide-react";
+import { PageHero } from "@/components/site/PageHero";
+import { services, contact } from "@/lib/site-data";
+
+export const Route = createFileRoute("/projekt-kalkulieren")({
+  head: () => ({
+    meta: [
+      { title: "Projekt kalkulieren — Kostenschätzung | UM Haus&Bau" },
+      {
+        name: "description",
+        content:
+          "Unverbindliche erste Kostenorientierung für Ihr Bau- oder Sanierungsprojekt in Hamburg und Umgebung — in wenigen Schritten.",
+      },
+      { property: "og:title", content: "Projekt kalkulieren — UM Haus&Bau" },
+      {
+        property: "og:description",
+        content: "In fünf Schritten zu einer ersten, unverbindlichen Kostenorientierung.",
+      },
+    ],
+  }),
+  component: KalkulatorPage,
+});
+
+const objectTypes = ["Wohnung", "Einfamilienhaus", "Mehrfamilienhaus", "Gewerbeimmobilie"];
+
+const sizeRanges = ["bis 50 m²", "50–100 m²", "100–200 m²", "über 200 m²"];
+
+const additionalOptions = [
+  "Planung & Genehmigungsunterlagen",
+  "Elektro-, Sanitär- oder Heizungskoordination",
+  "Möbel nach Maß",
+  "Terminierung mit engem Zeitfenster",
+];
+
+const CALCULATOR_DISCLAIMER =
+  "Die angezeigte Kostenschätzung ist unverbindlich und dient nur als erste Orientierung. Der tatsächliche Preis hängt von den individuellen Anforderungen und der finalen Projektplanung ab.";
+
+const TOTAL_STEPS = 5;
+
+function KalkulatorPage() {
+  const [step, setStep] = useState(1);
+  const [vorhaben, setVorhaben] = useState<string | null>(null);
+  const [objekt, setObjekt] = useState<string | null>(null);
+  const [groesse, setGroesse] = useState<string | null>(null);
+  const [leistungen, setLeistungen] = useState<string[]>([]);
+  const [optionen, setOptionen] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const toggle = (list: string[], setList: (v: string[]) => void, value: string) => {
+    setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  };
+
+  const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS + 1));
+  const back = () => setStep((s) => Math.max(s - 1, 1));
+
+  const canProceed =
+    (step === 1 && !!vorhaben) ||
+    (step === 2 && !!objekt) ||
+    (step === 3 && !!groesse) ||
+    (step === 4 && leistungen.length > 0) ||
+    step === 5;
+
+  return (
+    <>
+      <PageHero
+        label="Projekt kalkulieren"
+        title={
+          <>
+            Erste Orientierung{" "}
+            <span className="accent-italic text-navy-light">in 5 Schritten.</span>
+          </>
+        }
+        lead="Beantworten Sie einige kurze Fragen zu Ihrem Vorhaben. Wir melden uns danach mit einer individuellen Einschätzung zurück."
+      />
+
+      <section className="surface-cream">
+        <div className="mx-auto max-w-2xl px-5 py-16 md:px-8 md:py-24">
+          {step <= TOTAL_STEPS ? (
+            <>
+              {/* Progress indicator */}
+              <div className="mb-10">
+                <p className="mono-label text-navy">
+                  Schritt {step} von {TOTAL_STEPS}
+                </p>
+                <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-navy/10">
+                  <div
+                    className="h-full rounded-full bg-navy transition-all duration-300"
+                    style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-navy/12 bg-white/70 p-7 md:p-10">
+                {step === 1 ? (
+                  <StepChoice
+                    title="Was möchten Sie machen?"
+                    options={services.map((s) => s.title)}
+                    selected={vorhaben}
+                    onSelect={setVorhaben}
+                  />
+                ) : null}
+
+                {step === 2 ? (
+                  <StepChoice
+                    title="An welchem Objekt?"
+                    options={objectTypes}
+                    selected={objekt}
+                    onSelect={setObjekt}
+                  />
+                ) : null}
+
+                {step === 3 ? (
+                  <StepChoice
+                    title="Wie groß ist das Projekt?"
+                    options={sizeRanges}
+                    selected={groesse}
+                    onSelect={setGroesse}
+                  />
+                ) : null}
+
+                {step === 4 ? (
+                  <StepMulti
+                    title="Welche Leistungen benötigen Sie?"
+                    hint="Mehrfachauswahl möglich."
+                    options={services.map((s) => s.title)}
+                    selected={leistungen}
+                    onToggle={(v) => toggle(leistungen, setLeistungen, v)}
+                  />
+                ) : null}
+
+                {step === 5 ? (
+                  <StepMulti
+                    title="Welche zusätzlichen Optionen wünschen Sie?"
+                    hint="Optional — Mehrfachauswahl möglich."
+                    options={additionalOptions}
+                    selected={optionen}
+                    onToggle={(v) => toggle(optionen, setOptionen, v)}
+                  />
+                ) : null}
+              </div>
+
+              <div className="mt-8 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={back}
+                  disabled={step === 1}
+                  className="inline-flex items-center gap-2 rounded-full border border-navy/25 px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy/5 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ArrowLeft className="h-4 w-4" /> Zurück
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  disabled={!canProceed}
+                  className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+                >
+                  {step === TOTAL_STEPS ? "Zur Übersicht" : "Weiter"}{" "}
+                  <ArrowUpRight className="h-4 w-4" />
+                </button>
+              </div>
+            </>
+          ) : (
+            <ResultStep
+              vorhaben={vorhaben}
+              objekt={objekt}
+              groesse={groesse}
+              leistungen={leistungen}
+              optionen={optionen}
+              onBack={back}
+              submitted={submitted}
+              onSubmit={() => setSubmitted(true)}
+            />
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function StepChoice({
+  title,
+  options,
+  selected,
+  onSelect,
+}: {
+  title: string;
+  options: string[];
+  selected: string | null;
+  onSelect: (v: string) => void;
+}) {
+  return (
+    <div>
+      <h2 className="text-xl font-bold md:text-2xl">{title}</h2>
+      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+        {options.map((o) => {
+          const active = selected === o;
+          return (
+            <button
+              key={o}
+              type="button"
+              onClick={() => onSelect(o)}
+              className={`flex items-center justify-between gap-3 rounded-lg border px-5 py-4 text-left text-sm font-medium transition-colors ${
+                active
+                  ? "border-navy bg-navy text-primary-foreground"
+                  : "border-navy/20 bg-white text-foreground hover:border-navy/50"
+              }`}
+            >
+              {o}
+              {active ? <Check className="h-4 w-4 shrink-0" /> : null}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function StepMulti({
+  title,
+  hint,
+  options,
+  selected,
+  onToggle,
+}: {
+  title: string;
+  hint?: string;
+  options: string[];
+  selected: string[];
+  onToggle: (v: string) => void;
+}) {
+  return (
+    <div>
+      <h2 className="text-xl font-bold md:text-2xl">{title}</h2>
+      {hint ? <p className="mt-2 text-sm text-muted-foreground">{hint}</p> : null}
+      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+        {options.map((o) => {
+          const active = selected.includes(o);
+          return (
+            <button
+              key={o}
+              type="button"
+              onClick={() => onToggle(o)}
+              className={`flex items-center justify-between gap-3 rounded-lg border px-5 py-4 text-left text-sm font-medium transition-colors ${
+                active
+                  ? "border-navy bg-navy text-primary-foreground"
+                  : "border-navy/20 bg-white text-foreground hover:border-navy/50"
+              }`}
+            >
+              {o}
+              {active ? <Check className="h-4 w-4 shrink-0" /> : null}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ResultStep({
+  vorhaben,
+  objekt,
+  groesse,
+  leistungen,
+  optionen,
+  onBack,
+  submitted,
+  onSubmit,
+}: {
+  vorhaben: string | null;
+  objekt: string | null;
+  groesse: string | null;
+  leistungen: string[];
+  optionen: string[];
+  onBack: () => void;
+  submitted: boolean;
+  onSubmit: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-navy/12 bg-white/70 p-7 md:p-10">
+      <p className="mono-label text-navy">Zusammenfassung</p>
+      <h2 className="mt-3 text-2xl font-bold md:text-3xl">Ihre Auswahl</h2>
+
+      <dl className="mt-8 space-y-5 border-t border-navy/10 pt-8">
+        {[
+          { k: "Vorhaben", v: vorhaben ?? "—" },
+          { k: "Objekt", v: objekt ?? "—" },
+          { k: "Größe", v: groesse ?? "—" },
+          { k: "Leistungen", v: leistungen.length ? leistungen.join(", ") : "—" },
+          { k: "Zusätzliche Optionen", v: optionen.length ? optionen.join(", ") : "keine" },
+        ].map((row) => (
+          <div key={row.k} className="grid grid-cols-[8rem_1fr] gap-4">
+            <dt className="mono-label text-stone">{row.k}</dt>
+            <dd className="text-[0.975rem] font-medium">{row.v}</dd>
+          </div>
+        ))}
+      </dl>
+
+      {/* Placeholder / dev-state estimate — pricing engine not yet connected */}
+      <div className="mt-10 rounded-md border border-dashed border-navy/30 bg-navy/[0.04] p-6">
+        <p className="mono-label text-navy">Kostenschätzung</p>
+        <p className="mt-3 text-lg font-semibold text-foreground/70">
+          Noch keine automatische Schätzung verfügbar
+        </p>
+      </div>
+
+      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{CALCULATOR_DISCLAIMER}</p>
+
+      {!submitted ? (
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-navy/25 px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+          >
+            <ArrowLeft className="h-4 w-4" /> Auswahl ändern
+          </button>
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
+          >
+            Kontaktdaten angeben <ArrowUpRight className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <div className="mt-10 border-t border-navy/10 pt-8">
+          <p className="text-lg font-semibold">Ihre Kontaktdaten</p>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+            Die schnellste Rückmeldung erhalten Sie telefonisch, per WhatsApp oder E-Mail — Ihre
+            Auswahl von oben können Sie einfach mit angeben.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={contact.phoneHref}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
+            >
+              {contact.phone}
+            </a>
+            <Link
+              to="/kontakt"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-navy/25 px-7 py-3.5 text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+            >
+              Zum Kontaktformular <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

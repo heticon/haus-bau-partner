@@ -1,0 +1,244 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
+import { Eyebrow } from "@/components/site/Eyebrow";
+import { getProject, projects, reviews } from "@/lib/site-data";
+import { projectCover, projectGallery } from "@/lib/project-images";
+
+export const Route = createFileRoute("/projekte_/$slug")({
+  loader: ({ params }) => {
+    const project = getProject(params.slug);
+    if (!project) throw notFound();
+    return project;
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const p = loaderData;
+    return {
+      meta: [
+        { title: `${p.title} — Projekte | UM Haus&Bau` },
+        {
+          name: "description",
+          content: `${p.category} in ${p.location}: ${p.info}`.slice(0, 160),
+        },
+        { property: "og:title", content: `${p.title} — UM Haus&Bau` },
+        { property: "og:description", content: p.description },
+        { property: "og:type", content: "website" },
+        {
+          property: "og:image",
+          content: projectCover(p.slug),
+        },
+      ],
+      links: [{ rel: "canonical", href: `https://umhausbau.de/projekte/${p.slug}` }],
+    };
+  },
+  component: ProjectDetailPage,
+});
+
+function ProjectDetailPage() {
+  const project = Route.useLoaderData();
+  const relatedReviews = reviews.filter((r) => r.location === project.location).slice(0, 2);
+  const fallbackReviews = reviews.slice(0, 2);
+  const shownReviews = relatedReviews.length > 0 ? relatedReviews : fallbackReviews;
+
+  const idx = projects.findIndex((p) => p.slug === project.slug);
+  const next: (typeof projects)[number] = projects[(idx + 1) % projects.length] ?? project;
+
+  const gallery = projectGallery(project.slug);
+
+  return (
+    <>
+      {/* 1. Project hero — cover image */}
+      <section className="relative isolate overflow-hidden bg-ink">
+        <img
+          src={projectCover(project.slug)}
+          alt={project.title}
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover opacity-45"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-ink/90 via-ink/70 to-navy-deep/85" />
+        <div className="relative mx-auto max-w-site px-5 pb-20 pt-20 md:px-8 md:pb-28 md:pt-28">
+          <Eyebrow label={`${project.category} · ${project.location}`} tone="light" />
+          <h1 className="mt-7 max-w-3xl text-4xl font-extrabold leading-[1.05] text-white md:text-6xl">
+            {project.title}
+          </h1>
+          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/70">{project.info}</p>
+        </div>
+      </section>
+
+      {/* 2. Overview */}
+      <section className="surface-cream">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-8 border-y border-navy/12 py-10 md:grid-cols-4">
+            {[
+              { k: "Objekttyp", v: project.type },
+              { k: "Ort", v: project.location },
+              { k: "Kategorie", v: project.category },
+              {
+                k: "Ausgeführte Leistungen",
+                v: project.servicesPerformed.join(", "),
+              },
+            ].map((s) => (
+              <div key={s.k}>
+                <dt className="mono-label text-stone">{s.k}</dt>
+                <dd className="mt-2 text-[1.0625rem] font-semibold leading-snug">{s.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* 3. Description + 4. Work completed */}
+      <section className="bg-background">
+        <div className="mx-auto grid max-w-site gap-14 px-5 py-16 md:px-8 md:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)]">
+          <div>
+            <Eyebrow label="Beschreibung" />
+            <h2 className="mt-7 text-2xl font-bold leading-[1.1] md:text-3xl">
+              Ausgangslage &amp; <span className="accent-italic text-navy">Umsetzung.</span>
+            </h2>
+            <p className="mt-6 text-[1.0625rem] leading-relaxed text-muted-foreground">
+              {project.description}
+            </p>
+          </div>
+          <div>
+            <p className="mono-label text-navy">Durchgeführte Arbeiten</p>
+            <ul className="mt-5 space-y-2.5 border-t border-navy/10 pt-6 text-[0.975rem] text-foreground/85">
+              {project.work.map((w) => (
+                <li key={w} className="flex gap-3">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-navy" />
+                  {w}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Gallery — 1 → 1.1/1.2 → 2 ... naming order, captions from project-images.ts */}
+      {gallery.length > 0 ? (
+      <section className="surface-cream">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <Eyebrow label="Galerie" />
+          <h2 className="mt-7 max-w-2xl text-2xl font-bold leading-[1.1] md:text-3xl">
+            Bilder vom <span className="accent-italic text-navy">Projektverlauf.</span>
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {gallery.map((img) => (
+              <figure
+                key={img.src}
+                className="overflow-hidden rounded-lg border border-navy/12 bg-white/70"
+              >
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  width={640}
+                  height={480}
+                  loading="lazy"
+                  className="h-48 w-full object-cover"
+                />
+                <figcaption className="p-4 text-sm text-muted-foreground">
+                  {img.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+      ) : null}
+
+      {/* 6. Result */}
+      <section className="surface-dark">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <Eyebrow label="Ergebnis" tone="light" />
+          <p className="mt-7 max-w-2xl text-2xl font-bold leading-[1.2] text-white md:text-3xl">
+            {project.result}
+          </p>
+        </div>
+      </section>
+
+      {/* 7. Calculator CTA */}
+      <section className="surface-cream">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <div className="grid gap-6 rounded-lg border border-navy/12 bg-white/70 p-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-12">
+            <div>
+              <h2 className="text-2xl font-bold md:text-3xl">Ähnliches Projekt geplant?</h2>
+              <p className="mt-3 max-w-lg text-[1.0625rem] leading-relaxed text-muted-foreground">
+                Der Kostenkalkulator gibt eine erste, unverbindliche Orientierung für Ihr eigenes
+                Vorhaben.
+              </p>
+            </div>
+            <Link
+              to="/projekt-kalkulieren"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
+            >
+              Projekt kalkulieren <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Reviews */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <Eyebrow label="Bewertungen · MyHammer" />
+          <h2 className="mt-7 max-w-2xl text-2xl font-bold leading-[1.1] md:text-3xl">
+            Was Kunden <span className="accent-italic text-navy">dazu sagen.</span>
+          </h2>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {shownReviews.map((r) => (
+              <article
+                key={`${r.name}-${r.date}`}
+                className="flex flex-col rounded-lg border border-navy/12 bg-white/70 p-7"
+              >
+                <span className="font-mono text-xs tracking-[0.18em] text-navy">5 / 5</span>
+                <p className="mt-5 text-[1.0625rem] leading-relaxed text-foreground/85">
+                  „{r.text}“
+                </p>
+                <div className="mt-auto pt-6">
+                  <p className="text-sm font-semibold">
+                    {r.name} · {r.location}
+                  </p>
+                  <p className="mono-label mt-2 text-stone">MyHammer · {r.date}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Contact CTA */}
+      <section className="surface-dark">
+        <div className="mx-auto max-w-site px-5 py-16 md:px-8 md:py-20">
+          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+            <h2 className="max-w-xl text-2xl font-bold text-white md:text-3xl">
+              Eigenes Vorhaben besprechen?
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/kontakt"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink transition duration-200 ease-out hover:-translate-y-0.5 hover:opacity-90"
+              >
+                Kontakt aufnehmen <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/projekte"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Alle Projekte
+              </Link>
+            </div>
+          </div>
+          <div className="mt-10 border-t border-white/12 pt-8">
+            <Link
+              to="/projekte/$slug"
+              params={{ slug: next.slug }}
+              className="text-sm font-semibold text-white/80 transition-colors hover:text-white"
+            >
+              Nächstes Projekt: {next.title} →
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

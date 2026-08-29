@@ -57,7 +57,6 @@ function DatenschutzPage() {
   return (
     <>
       <PageHero
-        number="10"
         label="Datenschutz"
         title="Datenschutzerklärung"
         lead="Diese Seite ist als Struktur angelegt. Die vollständige, rechtlich geprüfte Datenschutzerklärung wird ergänzt."

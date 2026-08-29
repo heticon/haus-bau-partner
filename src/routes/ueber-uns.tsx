@@ -29,7 +29,6 @@ function UeberUnsPage() {
   return (
     <>
       <PageHero
-        number="04"
         label="Über uns"
         title={
           <>
@@ -60,7 +59,7 @@ function UeberUnsPage() {
           </div>
 
           <div>
-            <Eyebrow number="05" label="Team & Erfahrung" />
+            <Eyebrow label="Team & Erfahrung" />
             <h2 className="mt-7 text-3xl font-bold md:text-[2.5rem]">
               Erfahrung, die am Bau{" "}
               <span className="accent-italic text-navy">gewachsen ist.</span>
@@ -102,7 +101,7 @@ function UeberUnsPage() {
 
       <section className="surface-cream">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
-          <Eyebrow number="06" label="Arbeitsweise" />
+          <Eyebrow label="Arbeitsweise" />
           <h2 className="mt-7 max-w-3xl text-3xl font-bold md:text-[2.75rem]">
             Wie aus einem Vorhaben ein{" "}
             <span className="accent-italic text-navy">geordnetes Projekt wird.</span>
@@ -123,7 +122,7 @@ function UeberUnsPage() {
 
       <section className="bg-background">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
-          <Eyebrow number="07" label="Qualifikation & Fachpartner" />
+          <Eyebrow label="Qualifikation & Fachpartner" />
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <div className="rounded-lg border border-navy/15 p-8">
               <p className="mono-label text-navy">UM Haus&amp;Bau selbst</p>
@@ -151,12 +150,21 @@ function UeberUnsPage() {
               </p>
               <ul className="mt-6 divide-y divide-border">
                 {partners.map((p) => (
-                  <li
-                    key={p.name}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 py-3.5"
-                  >
-                    <span className="min-w-0 truncate font-semibold">{p.name}</span>
-                    <span className="text-sm text-muted-foreground">{p.role}</span>
+                  <li key={p.slug} className="py-3.5">
+                    {p.url ? (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-semibold text-navy transition-colors hover:text-navy-deep"
+                      >
+                        {p.name}
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </a>
+                    ) : (
+                      <span className="font-semibold">{p.name}</span>
+                    )}
+                    <p className="mt-0.5 text-sm text-muted-foreground">{p.role}</p>
                   </li>
                 ))}
               </ul>
@@ -165,7 +173,7 @@ function UeberUnsPage() {
           <div className="mt-14">
             <Link
               to="/kontakt"
-              className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-navy-deep"
+              className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
             >
               Kontakt aufnehmen <ArrowUpRight className="h-4 w-4" />
             </Link>

@@ -19,9 +19,10 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
+  /* Single-typeface system: everything renders in the primary sans. */
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -106,39 +107,26 @@
   }
 }
 
-/* Serif italic accent voice — headline emphasis only */
+/* Headline emphasis voice — primary font, italic only */
 @utility accent-italic {
-  font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
 
-/* Monospace eyebrow / label voice */
+/* Eyebrow / label voice — primary font, tracked uppercase */
 @utility mono-label {
-  font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
-/* Off-white section with subtle dot grid */
+/* Off-white section */
 @utility surface-cream {
   background-color: var(--cream);
-  background-image: radial-gradient(
-    color-mix(in oklab, var(--navy) 14%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
-  background-position: -8px -8px;
 }
 
-/* Near-black section with soft navy radial glow */
+/* Near-black section */
 @utility surface-dark {
   background-color: var(--ink);
-  background-image: radial-gradient(
-    60% 70% at 12% 0%,
-    color-mix(in oklab, var(--navy-light) 20%, transparent) 0%,
-    transparent 70%
-  );
 }

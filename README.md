@@ -216,23 +216,18 @@ Core principle
 
 Quality should be visible through precision, not decoration. "Gute Arbeit. Klare Kommunikation. Zuverlässige Umsetzung."
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/362719d4-6b73-4234-922f-78b8276cc807).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 20+.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm install
+npm run dev      # start the dev server
+npm run build    # production build
+npm run preview  # preview the production build
+npm run lint     # eslint
+npm run format   # prettier
 ```
+
+Stack: TanStack Start (React 19, Vite, Nitro), Tailwind CSS v4, Radix UI primitives.
+Routes are file-based under `src/routes/`; `__root.tsx` is the app shell.

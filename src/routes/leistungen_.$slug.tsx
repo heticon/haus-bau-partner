@@ -1,0 +1,233 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
+import { PageHero } from "@/components/site/PageHero";
+import { Eyebrow } from "@/components/site/Eyebrow";
+import { getService, serviceDetails, projects } from "@/lib/site-data";
+import { projectCover, serviceImage } from "@/lib/project-images";
+
+export const Route = createFileRoute("/leistungen_/$slug")({
+  loader: ({ params }) => {
+    const service = getService(params.slug);
+    if (!service) throw notFound();
+    return service;
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const s = loaderData;
+    return {
+      meta: [
+        { title: `${s.title} — Leistungen | UM Haus&Bau` },
+        {
+          name: "description",
+          content: `${s.intro} Jetzt Projekt in Hamburg und Umgebung anfragen.`.slice(0, 160),
+        },
+        { property: "og:title", content: `${s.title} — UM Haus&Bau` },
+        { property: "og:description", content: s.intro },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: serviceImage(s.slug) },
+      ],
+      links: [
+        {
+          rel: "canonical",
+          href: `https://umhausbau.de/leistungen/${s.slug}`,
+        },
+      ],
+    };
+  },
+  component: ServiceDetailPage,
+});
+
+function ServiceDetailPage() {
+  const service = Route.useLoaderData();
+  const heroImg = serviceImage(service.slug);
+
+  const relatedProjects = projects.filter((p) => p.category === service.title).slice(0, 3);
+
+  const currentIndex = serviceDetails.findIndex((s) => s.slug === service.slug);
+  const next: (typeof serviceDetails)[number] =
+    serviceDetails[(currentIndex + 1) % serviceDetails.length] ?? service;
+
+  return (
+    <>
+      {/* 1. Service title + hero image */}
+      <section className="relative isolate overflow-hidden bg-ink">
+        <img
+          src={heroImg}
+          alt={`${service.title} — UM Haus&Bau`}
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-ink/90 via-ink/70 to-navy-deep/85" />
+        <div className="relative mx-auto max-w-site px-5 pb-20 pt-20 md:px-8 md:pb-28 md:pt-28">
+          <Eyebrow label="Leistungen" tone="light" />
+          <h1 className="mt-7 max-w-3xl text-4xl font-extrabold leading-[1.05] text-white md:text-6xl">
+            {service.title}
+          </h1>
+          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/70">{service.intro}</p>
+        </div>
+      </section>
+
+      {/* 2 & 3. Introduction + what UM Haus&Bau does */}
+      <section className="surface-cream">
+        <div className="mx-auto grid max-w-site gap-14 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)]">
+          <div>
+            <Eyebrow label="Was wir übernehmen" />
+            <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.5rem]">
+              Umfang der <span className="accent-italic text-navy">Leistung.</span>
+            </h2>
+            <p className="mt-6 text-[1.0625rem] leading-relaxed text-muted-foreground">
+              {service.what}
+            </p>
+          </div>
+
+          {/* 4. Included services */}
+          <div>
+            <p className="mono-label text-navy">Enthaltene Leistungen</p>
+            <ul className="mt-5 space-y-2.5 border-t border-navy/10 pt-6 text-[0.975rem] text-foreground/85">
+              {service.items.map((i) => (
+                <li key={i} className="flex gap-3">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-navy" />
+                  {i}
+                </li>
+              ))}
+            </ul>
+
+            {/* 5. Exclusions / limitations */}
+            {service.excludes && service.excludes.length > 0 ? (
+              <div className="mt-8 rounded-md border border-navy/15 bg-navy/[0.04] p-5">
+                <p className="mono-label text-stone">Nicht enthalten</p>
+                <ul className="mt-3 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                  {service.excludes.map((e) => (
+                    <li key={e}>{e}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {service.note ? (
+              <p className="mt-6 rounded-md border border-navy/15 bg-navy/[0.04] p-4 text-sm leading-relaxed text-muted-foreground">
+                {service.note}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Project photography (related projects) */}
+      {relatedProjects.length > 0 ? (
+        <section className="bg-background">
+          <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+              <div>
+                <Eyebrow label="Referenzen" />
+                <h2 className="mt-7 text-3xl font-bold leading-[1.08] md:text-[2.5rem]">
+                  {service.title} in <span className="accent-italic text-navy">der Praxis.</span>
+                </h2>
+              </div>
+              <Link
+                to="/projekte"
+                className="inline-flex items-center gap-2 rounded-full border border-navy/25 px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+              >
+                Alle Projekte <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="mt-14 grid gap-6 md:grid-cols-3">
+              {relatedProjects.map((p) => (
+                <Link
+                  key={p.slug}
+                  to="/projekte/$slug"
+                  params={{ slug: p.slug }}
+                  className="group block transition duration-200 ease-out hover:-translate-y-0.5"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-ink">
+                    <div className="relative transition-transform duration-500 group-hover:scale-[1.03]">
+                      <img
+                        src={projectCover(p.slug)}
+                        alt={p.title}
+                        width={640}
+                        height={480}
+                        loading="lazy"
+                        className="h-56 w-full object-cover"
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink/70 via-ink/25 to-transparent" />
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-5">
+                      <p className="mono-label text-white/65">{p.location}</p>
+                      <h3 className="mt-1 text-base font-bold text-white">{p.title}</h3>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* 7. Why choose UM Haus&Bau */}
+      <section className="surface-dark">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+          <Eyebrow label="Warum UM Haus&Bau" tone="light" />
+          <h2 className="mt-7 max-w-2xl text-3xl font-bold leading-[1.08] text-white md:text-[2.5rem]">
+            Gute Gründe <span className="accent-italic text-navy-light">für uns.</span>
+          </h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {service.why.map((w) => (
+              <div key={w} className="rounded-lg border border-white/12 bg-white/[0.035] p-7">
+                <p className="text-[1.0625rem] leading-relaxed text-white/85">{w}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Calculator CTA + 9. Contact CTA */}
+      <section className="surface-cream">
+        <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
+          <div className="grid gap-6 rounded-lg border border-navy/12 bg-white/70 p-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-12">
+            <div>
+              <Eyebrow label="Nächster Schritt" />
+              <h2 className="mt-5 text-2xl font-bold md:text-3xl">
+                Kosten für Ihr {service.title.toLowerCase()}-Vorhaben einschätzen.
+              </h2>
+              <p className="mt-3 max-w-lg text-[1.0625rem] leading-relaxed text-muted-foreground">
+                Der Kostenkalkulator gibt eine erste, unverbindliche Orientierung — in wenigen
+                Minuten.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
+              <Link
+                to="/projekt-kalkulieren"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
+              >
+                Projekt kalkulieren <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/kontakt"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-navy/25 px-7 py-3.5 text-sm font-semibold text-navy transition-colors hover:bg-navy/5"
+              >
+                Direkt anfragen
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-10 flex items-center justify-between border-t border-navy/10 pt-8">
+            <Link
+              to="/leistungen"
+              className="text-sm font-semibold text-navy transition-colors hover:text-navy-deep"
+            >
+              ← Alle Leistungen
+            </Link>
+            <Link
+              to="/leistungen/$slug"
+              params={{ slug: next.slug }}
+              className="text-sm font-semibold text-navy transition-colors hover:text-navy-deep"
+            >
+              Nächste Leistung: {next.title} →
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Eyebrow } from "@/components/site/Eyebrow";
-import { services, partners, ownQualifications } from "@/lib/site-data";
+import { serviceDetails, partners, ownQualifications } from "@/lib/site-data";
 
 export const Route = createFileRoute("/leistungen")({
   head: () => ({
@@ -28,7 +28,6 @@ function LeistungenPage() {
   return (
     <>
       <PageHero
-        number="01"
         label="Leistungen"
         title={
           <>
@@ -42,12 +41,17 @@ function LeistungenPage() {
       <section className="surface-cream">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
           <div className="grid gap-6 md:grid-cols-2">
-            {services.map((s) => (
-              <article
-                key={s.number}
-                className="flex flex-col rounded-lg border border-navy/12 bg-white/70 p-7 md:p-9"
+            {serviceDetails.map((s) => (
+              <Link
+                key={s.slug}
+                to="/leistungen/$slug"
+                params={{ slug: s.slug }}
+                className="group flex flex-col rounded-lg border border-navy/12 bg-white/70 p-7 transition duration-200 ease-out hover:-translate-y-0.5 hover:border-navy/30 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:p-9"
               >
-                <p className="font-mono text-xs text-navy">{s.number}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <p className="font-mono text-xs text-navy">{s.number}</p>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 -translate-y-1 translate-x-1 text-navy opacity-0 transition duration-300 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
+                </div>
                 <h2 className="mt-5 text-2xl font-bold md:text-[1.75rem]">{s.title}</h2>
                 <p className="mt-3 text-[1.0625rem] leading-relaxed text-muted-foreground">
                   {s.intro}
@@ -65,7 +69,11 @@ function LeistungenPage() {
                     {s.note}
                   </p>
                 ) : null}
-              </article>
+                <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-navy">
+                  Mehr erfahren
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -73,7 +81,7 @@ function LeistungenPage() {
 
       <section className="bg-background">
         <div className="mx-auto max-w-site px-5 py-20 md:px-8 md:py-28">
-          <Eyebrow number="09" label="Qualifikation & Fachpartner" />
+          <Eyebrow label="Qualifikation & Fachpartner" />
           <h2 className="mt-7 max-w-3xl text-3xl font-bold md:text-[2.75rem]">
             Klar getrennt: eigene Arbeiten und{" "}
             <span className="accent-italic text-navy">Fachpartner.</span>
@@ -120,7 +128,7 @@ function LeistungenPage() {
           <div className="mt-14">
             <Link
               to="/kontakt"
-              className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-navy-deep"
+              className="inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-navy-deep"
             >
               Projekt besprechen <ArrowUpRight className="h-4 w-4" />
             </Link>

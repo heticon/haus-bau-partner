@@ -116,11 +116,43 @@ export const services: {
   },
 ];
 
-export const partners = [
-  { name: "AF Elektro GmbH", role: "Elektroarbeiten" },
-  { name: "BuB Bau GmbH", role: "Sanitär und Heizung" },
-  { name: "PHILIGNUM GmbH", role: "Projektplanung" },
-  { name: "Ingenieurbüro Dirk Postels", role: "Umplanung, Planung und Berechnungen" },
+export const partners: {
+  name: string;
+  role: string;
+  /** External site, when the partner has one. */
+  url?: string;
+  /** Optional logo at src/assets/partners/<slug>.{svg,png,jpg,webp}. */
+  slug: string;
+}[] = [
+  {
+    name: "AF Elektro GmbH",
+    role: "Elektroarbeiten",
+    url: "https://af-elektro.de",
+    slug: "af-elektro",
+  },
+  {
+    name: "BuB Bau GmbH",
+    role: "Sanitär und Heizung",
+    url: "https://www.bubbaugmbh.de",
+    slug: "bub-bau",
+  },
+  {
+    name: "Schümann Innenausbau",
+    role: "Innenausbau und Zimmerei",
+    slug: "schuemann-innenausbau",
+  },
+  {
+    name: "Haliuk Möbelbau",
+    role: "Möbelbau nach Maß",
+    url: "https://www.haliukmoebelbau.de",
+    slug: "haliuk-moebelbau",
+  },
+  { name: "PHILIGNUM GmbH", role: "Projektplanung", slug: "philignum" },
+  {
+    name: "Ingenieurbüro Dirk Postels",
+    role: "Umplanung, Planung und Berechnungen",
+    slug: "ingenieurbuero-postels",
+  },
 ];
 
 export const ownQualifications = [
@@ -131,13 +163,22 @@ export const ownQualifications = [
   "Fliesenarbeiten",
 ];
 
-export const reviews = [
+export const reviews: {
+  name: string;
+  location: string;
+  date: string;
+  service: string;
+  text: string;
+  /** Shown in the homepage carousel; all reviews appear on /projekte. */
+  featured?: boolean;
+}[] = [
   {
     name: "Katharina",
     location: "Hamburg",
     date: "11.03.2026",
     service: "Innenausbau & Sanierung, ganzes Haus, Abrissarbeiten",
     text: "Sehr saubere Arbeiten, immer erreichbar und freundlich.",
+    featured: true,
   },
   {
     name: "David",
@@ -146,6 +187,7 @@ export const reviews = [
     service: "Innenausbau & Sanierung — Wohn-/Esszimmer, Schlafzimmer, Untergeschoss",
     text:
       "Nach dem Kauf einer Wohnung aus den 80er Jahren hat Vasyl als Projektleiter Abbruch, Strom, Estrich, Boden, Treppe, Trockenbau und Malerarbeiten sowie einen separaten Heizungs- und Sanitärtechniker koordiniert. Fertig in 3 Monaten — eine klare Weiterempfehlung.",
+    featured: true,
   },
   {
     name: "MyHammer-Kunde",
@@ -162,6 +204,7 @@ export const reviews = [
     service: "Teppichboden 36 m² + Malerarbeiten",
     text:
       "Nach dem Unfall meines Mannes kurzfristig organisiert — sehr zufrieden.",
+    featured: true,
   },
   {
     name: "MyHammer-Kunde",
@@ -178,6 +221,7 @@ export const reviews = [
     service: "Wärmedämmung & Abdichtung, 80 m², ganzes Gebäude",
     text:
       "Keller außen abgedichtet und isoliert, zu fairem Preis und ohne Nachforderung trotz unerwarteter Arbeiten.",
+    featured: true,
   },
   {
     name: "Kristina",
@@ -365,239 +409,218 @@ export type Project = {
   servicesPerformed: string[];
   description: string;
   work: string[];
-  gallery: { caption: string }[];
   result: string;
   featured: boolean;
 };
 
+/*
+ * Rebuilt from the real photo sets in src/assets/projects/projects/<1..11>/.
+ * slug / title / category / location come straight from each folder's info.md;
+ * the prose fields (description, work, result, servicesPerformed, type, info)
+ * are provisional and meant to be tightened by the client. Image galleries and
+ * their captions are generated in project-images.ts from the folder contents.
+ */
+
 export const projects: Project[] = [
   {
-    slug: "komplettsanierung-wohnung-hamburg",
-    title: "Wohnung aus den 80er Jahren, saniert in 3 Monaten",
-    category: "Sanierung & Renovierung",
+    slug: "kellerabdichtung-hamburg",
+    title: "Kellerabdichtung und Außendämmung, Hamburg",
+    category: "Dach & Fassade",
     location: "Hamburg",
-    info: "Wohn-/Esszimmer, Schlafzimmer und Untergeschoss, 3 Monate Bauzeit",
-    type: "Eigentumswohnung, Bestand",
-    servicesPerformed: ["Abbruch", "Trockenbau", "Estrich & Boden", "Malerarbeiten", "Koordination Elektro/Sanitär"],
+    info: "Kellergeschoss von außen freigelegt, abgedichtet und gedämmt",
+    type: "Wohngebäude, Bestand",
+    servicesPerformed: ["Erdarbeiten", "Bauwerksabdichtung", "Perimeterdämmung", "Wiederverfüllung"],
     description:
-      "Nach dem Kauf einer Wohnung aus den 80er Jahren wurde das gesamte Objekt neu strukturiert und in drei Monaten bezugsfertig übergeben.",
+      "Das Kellergeschoss eines Wohngebäudes in Hamburg wurde von außen freigelegt, abgedichtet und gedämmt.",
     work: [
-      "Abbrucharbeiten und Entsorgung",
-      "Elektro über Fachpartner, koordiniert im Terminplan",
-      "Estrich, Bodenaufbau und Treppe",
-      "Trockenbau inklusive Spachtelarbeiten",
-      "Malerarbeiten und Endreinigung",
+      "Freilegen der Kelleraußenwände",
+      "Untergrundvorbereitung",
+      "Abdichtung und Perimeterdämmung",
+      "Wiederverfüllung und Geländeanpassung",
     ],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangszustand vor Beginn" },
-      { caption: "Zwischenstand der Ausbauarbeiten" },
-      { caption: "Fertige Oberflächen" },
-    ],
-    result: "Bezugsfertige Wohnung nach drei Monaten, alle Gewerke über einen Ansprechpartner koordiniert.",
-    featured: true,
+    result: "Dauerhaft geschützte und gedämmte Gebäudehülle im Kellerbereich.",
+    featured: false,
   },
   {
-    slug: "kellerabdichtung-terrasse-barsbuettel",
-    title: "Kellerabdichtung mit neuer Terrasse",
+    slug: "kellerabdichtung-terrasse-wintergarten-barsbuettel",
+    title: "Kellerabdichtung mit Terrasse und Wintergarten, Barsbüttel",
     category: "Dach & Fassade",
     location: "Barsbüttel",
-    info: "85 m², Außenabdichtung und Dämmung am gesamten Gebäude",
+    info: "Kellerabdichtung und -dämmung, anschließend Terrasse und Wintergarten",
     type: "Einfamilienhaus, Bestand",
-    servicesPerformed: ["Bauwerksabdichtung", "Perimeterdämmung", "Terrassenbau", "Terrassendach"],
+    servicesPerformed: ["Bauwerksabdichtung", "Perimeterdämmung", "Terrassenbau", "Wintergarten"],
     description:
-      "Mehrmonatiges Projekt: der Keller wurde von außen freigelegt, abgedichtet und gedämmt, ergänzt um eine neue Terrasse mit Terrassendach.",
+      "Nach Abdichtung und Dämmung des Kellergeschosses von außen wurde der Außenbereich um eine Terrasse und einen Wintergarten erweitert.",
     work: [
       "Erdarbeiten und Freilegen der Kelleraußenwand",
       "Abdichtung und Perimeterdämmung",
       "Wiederverfüllung und Geländeanpassung",
-      "Neubau der Terrasse inklusive Überdachung",
+      "Bau von Terrasse und Wintergarten",
     ],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangszustand der Gebäudehülle" },
-      { caption: "Abdichtung und Dämmung im Aufbau" },
-      { caption: "Fertige Terrasse mit Dach" },
-    ],
-    result: "Dauerhaft trockener Keller und ein nutzbarer Außenbereich.",
+    result: "Trockener Keller und ein neuer, ganzjährig nutzbarer Außenbereich.",
     featured: true,
   },
   {
-    slug: "einbaumoebel-nach-mass-norderstedt",
-    title: "Einbaumöbel nach Maß",
+    slug: "badsanierung-elmshorn",
+    title: "Komplette Badsanierung, Elmshorn",
+    category: "Bad & Raumgestaltung",
+    location: "Elmshorn",
+    info: "Vollständige Badsanierung inklusive neuer Sanitär- und Elektroinstallation",
+    type: "Wohnhaus, Bestand",
+    servicesPerformed: ["Rückbau", "Fliesenarbeiten", "Koordination Sanitär", "Koordination Elektro"],
+    description:
+      "Ein Badezimmer wurde vollständig zurückgebaut und mit neuer Sanitär- und Elektroinstallation neu aufgebaut.",
+    work: [
+      "Rückbau des Bestandsbades",
+      "Sanitär- und Elektroinstallation über Fachpartner",
+      "Abdichtung und Fliesenarbeiten",
+      "Montage und Übergabe",
+    ],
+    result: "Neu aufgebautes Bad mit erneuerter Haustechnik.",
+    featured: false,
+  },
+  {
+    slug: "badsanierung-behoerde",
+    title: "Badsanierung in einem Behördengebäude",
+    category: "Bad & Raumgestaltung",
+    location: "Raum Hamburg",
+    info: "Sanierung einer Sanitäranlage in einem öffentlichen Gebäude (Adresse vertraulich)",
+    type: "Öffentliches Gebäude",
+    servicesPerformed: ["Rückbau", "Trockenbau", "Fliesenarbeiten", "Koordination Sanitär"],
+    description:
+      "Sanierung einer Sanitäranlage in einem Gebäude der öffentlichen Hand. Die genaue Adresse wird nicht veröffentlicht.",
+    work: [
+      "Rückbau der Bestandsausstattung",
+      "Sanitärarbeiten über Fachpartner",
+      "Trockenbau, Abdichtung und Fliesen",
+      "Montage und Übergabe",
+    ],
+    result: "Sanierte, normgerecht ausgestattete Sanitäranlage.",
+    featured: false,
+  },
+  {
+    slug: "komplettrenovierung-wohnung-hamburg",
+    title: "Komplette Wohnungsrenovierung mit Mikrozement-Bädern, Hamburg",
+    category: "Sanierung & Renovierung",
+    location: "Hamburg",
+    info: "Komplette Renovierung einer Wohnung, Bäder mit dekorativem Mikrozement",
+    type: "Eigentumswohnung, Bestand",
+    servicesPerformed: ["Abbruch", "Trockenbau", "Bodenarbeiten", "Malerarbeiten", "Dekorativer Mikrozement"],
+    description:
+      "Eine Wohnung wurde vollständig renoviert; die Bäder erhielten eine fugenlose Oberfläche aus dekorativem Mikrozement.",
+    work: [
+      "Abbruch- und Entkernungsarbeiten",
+      "Trockenbau und Spachtelarbeiten",
+      "Boden- und Malerarbeiten",
+      "Dekorative Mikrozement-Beschichtung der Bäder",
+    ],
+    result: "Vollständig renovierte Wohnung mit fugenlosen Bad-Oberflächen.",
+    featured: true,
+  },
+  {
+    slug: "abdichtung-parkdeck-schenefeld",
+    title: "Abdichtung einer Deckenplatte über dem Parkdeck, Schenefeld",
+    category: "Dach & Fassade",
+    location: "Schenefeld",
+    info: "Abdichtung der Deckenplatte über der Parkebene eines Einkaufszentrums",
+    type: "Gewerbeimmobilie, Einkaufszentrum",
+    servicesPerformed: ["Untergrundvorbereitung", "Gefälleaufbau", "Bauwerksabdichtung"],
+    description:
+      "Die Deckenplatte über der Parkebene eines Einkaufszentrums wurde neu abgedichtet.",
+    work: [
+      "Rückbau des Altaufbaus",
+      "Untergrundvorbereitung und Gefälle",
+      "Abdichtung",
+      "Schutz- und Nutzschicht",
+    ],
+    result: "Dauerhaft abgedichtete, befahrbare Deckenplatte.",
+    featured: false,
+  },
+  {
+    slug: "bueroumbau-renovierung",
+    title: "Umplanung und Renovierung von Büroräumen",
+    category: "Sanierung & Renovierung",
+    location: "Raum Hamburg",
+    info: "Neuaufteilung und Renovierung einer Bürofläche",
+    type: "Gewerbeimmobilie, Büro",
+    servicesPerformed: ["Umplanung", "Trockenbau", "Bodenarbeiten", "Malerarbeiten"],
+    description: "Eine Bürofläche wurde neu aufgeteilt und renoviert.",
+    work: [
+      "Rückbau bestehender Trennwände",
+      "Neue Trockenbauwände",
+      "Boden- und Malerarbeiten",
+      "Übergabe der Flächen",
+    ],
+    result: "Neu strukturierte, renovierte Bürofläche.",
+    featured: false,
+  },
+  {
+    slug: "terrassenplatten-kayhude",
+    title: "Terrassenplatten verlegen, Kayhude",
+    category: "Bau & Neubau",
+    location: "Kayhude",
+    info: "Verlegen von Terrassenplatten auf vorbereitetem Unterbau",
+    type: "Einfamilienhaus",
+    servicesPerformed: ["Unterbau", "Plattenverlegung"],
+    description: "Auf einer vorbereiteten Fläche wurden Terrassenplatten verlegt.",
+    work: ["Unterbau und Tragschicht", "Verlegen der Platten", "Randabschluss und Reinigung"],
+    result: "Befestigte, nutzbare Terrassenfläche.",
+    featured: false,
+  },
+  {
+    slug: "einbaumoebel-nach-mass",
+    title: "Einbaumöbel nach Maß – Fertigung und Montage",
     category: "Möbelbau",
     location: "Norderstedt",
-    info: "Planung und Fertigung in der eigenen Möbelwerkstatt",
+    info: "Planung, Fertigung in der eigenen Werkstatt und Montage von Einbaumöbeln",
     type: "Privatwohnung",
-    servicesPerformed: ["Möbelplanung", "Fertigung nach Maß", "Montage"],
+    servicesPerformed: ["Aufmaß", "Möbelplanung", "Fertigung nach Maß", "Montage"],
     description:
-      "Einbaumöbel, abgestimmt auf Raummaße, Nutzung und die Oberflächen des Innenausbaus.",
+      "Einbaumöbel wurden nach Aufmaß geplant, in der eigenen Werkstatt in Norderstedt gefertigt und montiert.",
     work: [
       "Aufmaß vor Ort",
       "Planung und Materialauswahl",
-      "Fertigung in der Werkstatt in Norderstedt",
+      "Fertigung in der Werkstatt",
       "Montage und Feinjustierung",
     ],
-    gallery: [
-      { caption: "Übersicht nach Montage" },
-      { caption: "Raumsituation vor der Möblierung" },
-      { caption: "Fertigung in der Werkstatt" },
-      { caption: "Detail der fertigen Fronten" },
-    ],
-    result: "Maßgefertigte Möbel, passgenau in vorhandene Raumgeometrien eingefügt.",
+    result: "Passgenau eingefügte Einbaumöbel nach Maß.",
     featured: true,
   },
   {
-    slug: "deckenverkleidung-trockenbau-seevetal",
-    title: "Deckenverkleidung in Trockenbau",
-    category: "Innenausbau & Oberflächen",
-    location: "Seevetal",
-    info: "62 m², Flur, Küche, Wohn- und Esszimmer in 3 Tagen",
-    type: "Einfamilienhaus, Bestand",
-    servicesPerformed: ["Trockenbau", "Spachtelarbeiten"],
-    description: "Deckenverkleidung inklusive Spachteln über vier Räume.",
-    work: ["Unterkonstruktion", "Beplankung", "Spachteln in Q3", "Reinigung und Übergabe"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangszustand der Decken" },
-      { caption: "Unterkonstruktion im Aufbau" },
-      { caption: "Gespachtelte Flächen" },
-    ],
-    result: "Ebene Deckenflächen, fertig für Malerarbeiten — in drei Tagen.",
-    featured: false,
-  },
-  {
-    slug: "kellerabdichtung-hamburg",
-    title: "Kellerabdichtung und Dämmung",
-    category: "Dach & Fassade",
-    location: "Hamburg",
-    info: "80 m², Abdichtung und Isolierung des gesamten Gebäudes",
-    type: "Einfamilienhaus, Bestand",
-    servicesPerformed: ["Bauwerksabdichtung", "Dämmung", "Erdarbeiten"],
+    slug: "dachuntersicht-gartenhaus",
+    title: "Dachuntersicht streichen und Gartenhaus bauen",
+    category: "Bau & Neubau",
+    location: "Raum Hamburg",
+    info: "Anstrich der Dachuntersicht und Neubau eines Gartenhauses",
+    type: "Einfamilienhaus, Außenanlage",
+    servicesPerformed: ["Malerarbeiten", "Fundament", "Holzbau"],
     description:
-      "Keller von außen abgedichtet und isoliert — zu fairem Preis und ohne Nachforderung trotz unerwarteter Zusatzarbeiten.",
-    work: ["Freilegen", "Untergrundvorbereitung", "Abdichtung", "Dämmung und Verfüllung"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Freigelegte Kelleraußenwand" },
-      { caption: "Abdichtungsaufbau" },
-      { caption: "Wiederhergestelltes Gelände" },
+      "Die Dachuntersicht wurde gestrichen und im Garten ein Gartenhaus neu errichtet.",
+    work: [
+      "Vorbereitung und Anstrich der Dachuntersicht",
+      "Fundament für das Gartenhaus",
+      "Aufbau des Gartenhauses",
+      "Abschlussarbeiten",
     ],
-    result: "Gebäudehülle dauerhaft geschützt, Termin- und Kostenrahmen gehalten.",
+    result: "Aufgefrischte Dachuntersicht und ein neues Gartenhaus.",
     featured: false,
   },
   {
-    slug: "teppichboden-malerarbeiten-barmstedt",
-    title: "Bodenbelag und Malerarbeiten",
+    slug: "zimmerrenovierung-nach-schimmel",
+    title: "Zimmerrenovierung nach Schimmelbefall",
     category: "Innenausbau & Oberflächen",
-    location: "Barmstedt",
-    info: "36 m² Teppichboden inklusive Malerarbeiten, kurzfristig organisiert",
+    location: "Raum Hamburg",
+    info: "Sanierung und Renovierung eines Zimmers nach Schimmelbefall",
     type: "Wohnung, Bestand",
-    servicesPerformed: ["Bodenarbeiten", "Malerarbeiten"],
-    description: "Kurzfristig organisierter Auftrag mit engem Zeitfenster.",
-    work: ["Alten Belag entfernen", "Untergrund vorbereiten", "Teppichboden verlegen", "Malerarbeiten"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangszustand der Räume" },
-      { caption: "Untergrundvorbereitung" },
-      { caption: "Fertiger Bodenbelag" },
+    servicesPerformed: ["Schadensaufnahme", "Untergrundsanierung", "Putzarbeiten", "Malerarbeiten"],
+    description: "Ein von Schimmel betroffenes Zimmer wurde saniert und renoviert.",
+    work: [
+      "Aufnahme des Schadensbilds",
+      "Entfernen befallener Oberflächen",
+      "Untergrundsanierung",
+      "Putz-, Maler- und Oberflächenarbeiten",
     ],
-    result: "Räume kurzfristig wieder nutzbar.",
-    featured: false,
-  },
-  {
-    slug: "terrassenbau-hamburg",
-    title: "Terrasse mit Überdachung",
-    category: "Bau & Neubau",
-    location: "Hamburg",
-    info: "Neubau einer Terrasse inklusive Unterbau",
-    type: "Einfamilienhaus",
-    servicesPerformed: ["Betonarbeiten", "Terrassenbau"],
-    description: "Neubau eines Außenbereichs mit tragfähigem Unterbau und Überdachung.",
-    work: ["Aushub und Unterbau", "Betonarbeiten", "Belag", "Überdachung"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangssituation im Garten" },
-      { caption: "Unterbau und Betonarbeiten" },
-      { caption: "Fertige Terrasse" },
-    ],
-    result: "Ganzjährig nutzbarer Außenbereich.",
-    featured: false,
-  },
-  {
-    slug: "fassadendaemmung-norderstedt",
-    title: "Fassadendämmung und Neugestaltung",
-    category: "Dach & Fassade",
-    location: "Norderstedt",
-    info: "Dämmung, Putz und Farbgestaltung der Gebäudehülle",
-    type: "Einfamilienhaus, Bestand",
-    servicesPerformed: ["Fassadendämmung", "Putzarbeiten", "Fassadengestaltung"],
-    description: "Energetische Aufwertung der Gebäudehülle mit neuer Optik.",
-    work: ["Gerüststellung", "Dämmung", "Armierung und Putz", "Anstrich"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Fassade vor Beginn" },
-      { caption: "Dämmung im Aufbau" },
-      { caption: "Fertige Fassade" },
-    ],
-    result: "Gedämmte, neu gestaltete Fassade.",
-    featured: false,
-  },
-  {
-    slug: "badsanierung-hamburg",
-    title: "Badsanierung im Bestand",
-    category: "Bad & Raumgestaltung",
-    location: "Hamburg",
-    info: "Planung und Ausführung inklusive koordinierter Sanitärarbeiten",
-    type: "Wohnung, Bestand",
-    servicesPerformed: ["Badplanung", "Fliesenarbeiten", "Trockenbau", "Koordination Sanitär"],
-    description: "Vollständige Neuplanung eines Bades im bewohnten Bestand.",
-    work: ["Rückbau", "Sanitär über Fachpartner", "Abdichtung und Fliesen", "Montage und Übergabe"],
-    gallery: [
-      { caption: "Übersicht nach Fertigstellung" },
-      { caption: "Ausgangszustand des Bades" },
-      { caption: "Rohinstallation und Abdichtung" },
-      { caption: "Fertiges Bad" },
-    ],
-    result: "Neues Bad mit klar abgestimmtem Terminablauf.",
-    featured: false,
-  },
-  {
-    slug: "objektbetreuung-hamburg",
-    title: "Laufende Objektbetreuung",
-    category: "Hausmeisterservice & Objektbetreuung",
-    location: "Hamburg",
-    info: "Regelmäßige Betreuung eines Wohnobjekts",
-    type: "Mehrfamilienhaus",
-    servicesPerformed: ["Hausmeisterservice", "Kleinreparaturen"],
-    description: "Wiederkehrende Betreuung inklusive kleinerer Instandhaltungsarbeiten.",
-    work: ["Regelmäßige Kontrollgänge", "Kleinreparaturen", "Koordination von Fachbetrieben"],
-    gallery: [
-      { caption: "Übersicht des Objekts" },
-      { caption: "Instandhaltungsarbeiten" },
-      { caption: "Außenbereich" },
-      { caption: "Abgeschlossene Arbeiten" },
-    ],
-    result: "Objekt dauerhaft in gepflegtem Zustand.",
-    featured: false,
-  },
-  {
-    slug: "entsorgung-erdaushub-hamburg",
-    title: "Entsorgung und Räumung",
-    category: "Bau & Neubau",
-    location: "Hamburg",
-    info: "Entsorgung von Gartenabfällen und Erdaushub, 3–4 m³",
-    type: "Privatgrundstück",
-    servicesPerformed: ["Räumung", "Entsorgung"],
-    description: "Kurzfristige Räumung und fachgerechte Entsorgung.",
-    work: ["Terminvereinbarung", "Räumung", "Abtransport", "Entsorgungsnachweis"],
-    gallery: [
-      { caption: "Übersicht der Fläche" },
-      { caption: "Ausgangszustand" },
-      { caption: "Räumung im Gange" },
-      { caption: "Geräumte Fläche" },
-    ],
-    result: "Fläche zügig und sauber geräumt.",
+    result: "Saniertes, wieder nutzbares Zimmer mit erneuerten Oberflächen.",
     featured: false,
   },
 ];
