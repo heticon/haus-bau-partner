@@ -91,7 +91,8 @@ function Index() {
         <div className="relative mx-auto max-w-site px-5 pb-14 pt-28 md:px-8 md:pb-52 md:pt-36">
           <Eyebrow label="Bauunternehmen Norderstedt · seit 2024" tone="light" />
           <h1 className="mt-8 max-w-4xl text-[2.25rem] font-extrabold leading-[1.06] text-white sm:text-[2.5rem] sm:leading-[1.02] md:text-7xl">
-            Alles aus einer Hand —{" "}
+            Alles aus
+            <br className="sm:hidden" /> einer&nbsp;Hand —{" "}
             <span className="accent-italic text-navy-light">ein Ansprechpartner</span> für Ihr
             Projekt.
           </h1>
