@@ -26,19 +26,18 @@ export function PartnerStrip() {
           const logo = partnerLogo(p.slug);
           const body = (
             <>
-              <div className="flex h-16 items-center">
-                {logo ? (
+              {logo ? (
+                <div className="mb-4 flex h-14 items-center">
                   <img
                     src={logo}
-                    alt={p.name}
+                    alt=""
                     loading="lazy"
-                    className="max-h-16 w-auto max-w-[11rem] object-contain object-left"
+                    className="max-h-14 w-auto max-w-[10rem] object-contain object-left"
                   />
-                ) : (
-                  <span className="text-lg font-bold leading-tight text-foreground">{p.name}</span>
-                )}
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground">{p.role}</p>
+                </div>
+              ) : null}
+              <p className="text-lg font-bold leading-tight text-foreground">{p.name}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{p.role}</p>
               {p.url ? (
                 <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-navy">
                   Website

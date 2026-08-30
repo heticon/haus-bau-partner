@@ -147,12 +147,6 @@ export const partners: {
     url: "https://www.haliukmoebelbau.de",
     slug: "haliuk-moebelbau",
   },
-  { name: "PHILIGNUM GmbH", role: "Projektplanung", slug: "philignum" },
-  {
-    name: "Ingenieurbüro Dirk Postels",
-    role: "Umplanung, Planung und Berechnungen",
-    slug: "ingenieurbuero-postels",
-  },
 ];
 
 export const ownQualifications = [
